@@ -26,6 +26,10 @@ GESTORES_COOKIES = (
     "iubenda", "usercentrics", "didomi", "quantcast", "termly", "cookie-script", "osano",
     "borlabs", "klaro", "tarteaucitron", "axeptio", "cookie-notice", "cookieconsent",
     "cookie-consent", "cookiefirst", "moove_gdpr", "gdpr-cookie",
+    "eu-cookie-compliance", "eu_cookie_compliance", "cookie-banner", "cookiebanner", "cookie_banner",
+    "cookies-banner", "cookie-bar", "cookiebar", "cookie-prefs", "cookies-box", "cookie_notice",
+    "consent-tracking-api", "consentmanager", "cookiehub", "cookiepro", "trustarc", "civiccomputing",
+    "cookieinformation", "real-cookie-banner", "gtag('consent'", 'gtag("consent"',
 )
 
 TELEFONO = re.compile(r"(?<!\d)(?:\+34|0034)?[\s.-]?[6789]\d{2}[\s.-]?\d{2,3}[\s.-]?\d{2,3}[\s.-]?\d{0,2}(?!\d)")
@@ -77,7 +81,9 @@ def analizar_html(html: str, url_final: str) -> dict[str, Any]:
     idioma = etiqueta_html.get("lang") if etiqueta_html else None
 
     imagenes = sopa.find_all("img")
-    sin_alt = [i for i in imagenes if not (i.get("alt") or "").strip()]
+    # alt="" es la forma correcta de marcar una imagen decorativa: solo cuenta si falta el atributo.
+    sin_alt = [i for i in imagenes if i.get("alt") is None
+               and i.get("aria-hidden") != "true" and i.get("role") != "presentation"]
 
     enlaces = sopa.find_all("a")
     textos_enlaces = [(_texto(a).lower(), str(a.get("href") or "").lower()) for a in enlaces]
@@ -106,13 +112,20 @@ def analizar_html(html: str, url_final: str) -> dict[str, Any]:
         "datos_estructurados": _tipos_json_ld(sopa),
         "imagenes": len(imagenes),
         "imagenes_sin_alt": len(sin_alt),
-        "aviso_legal": hay_enlace("aviso legal", "aviso-legal", "avisolegal", "legal notice", "nota legal", "terminos", "términos"),
+        "aviso_legal": hay_enlace("aviso legal", "aviso-legal", "avisolegal", "legal notice", "nota legal", "terminos", "términos",
+                                  "condiciones de uso", "condiciones-de-uso", "condiciones generales", "condiciones-generales",
+                                  "condiciones legales", "información legal", "informacion-legal", "advertencia legal",
+                                  "advertencia-legal", "terms", "/legal"),
         "privacidad": hay_enlace("privacidad", "privacy", "protección de datos", "proteccion-de-datos"),
         "enlace_cookies": hay_enlace("cookies"),
         "tel_clicable": tel_clicable,
         "tel_en_texto": tel_en_texto,
         "email": any(h.startswith("mailto:") for h in hrefs),
         "whatsapp": any("wa.me/" in h or "api.whatsapp.com" in h for h in hrefs),
+        "pagina_contacto": hay_enlace("contacto", "contacta", "contáctanos", "contact"),
+        # Portada casi vacía: el contenido lo pinta JavaScript y aquí no se ve. Sin enlaces, imágenes ni texto,
+        # «no hemos encontrado X» no significa nada, así que esas comprobaciones se omiten.
+        "poco_contenido": len(enlaces) < 3 and not imagenes and len(texto_visible) < 300,
         "rastreadores": [nombre for nombre, marcas in RASTREADORES.items() if any(m in bajo for m in marcas)],
         "gestor_cookies": any(g in bajo for g in GESTORES_COOKIES),
         "tecnologia": generador[:60] if generador else None,
@@ -139,6 +152,10 @@ def recoger_datos(url: str) -> dict[str, Any]:
                 raise UrlNoValida("No hemos podido abrir esa web. Comprueba que la dirección es correcta y que funciona.")
         else:
             raise UrlNoValida("No hemos podido abrir esa web. Comprueba que la dirección es correcta y que funciona.")
+    if portada.estado in (401, 403, 429):
+        raise UrlNoValida("Esa web no deja que la revisen herramientas automáticas, así que no podemos analizarla.")
+    if portada.truncada:
+        raise UrlNoValida("La portada de esa web pesa demasiado para analizarla entera, y no queremos darte un informe a medias.")
     if portada.estado >= 400:
         raise UrlNoValida(f"La web ha respondido con un error ({portada.estado}) y no se puede analizar.")
     if "<html" not in portada.texto.lower() and "<body" not in portada.texto.lower():
@@ -163,4 +180,7 @@ def recoger_datos(url: str) -> dict[str, Any]:
     texto_robots = robots.texto.lower() if robots and "<html" not in robots.texto.lower() else ""
     datos["robots_txt"] = bool(texto_robots)
     datos["sitemap"] = "sitemap:" in texto_robots or _existe(f"{base}/sitemap.xml") is not None
+    if not datos["favicon"]:  # sin etiqueta <link>, los navegadores usan /favicon.ico si existe
+        icono = _existe(f"{base}/favicon.ico")
+        datos["favicon"] = bool(icono and icono.cabeceras.get("content-type", "").startswith("image"))
     return datos

@@ -285,7 +285,7 @@ PLANTILLAS: dict[str, dict] = {
         "mal": {
             "titulo": "Usas herramientas de seguimiento y no vemos aviso de cookies",
             "explicacion": "Hemos detectado {rastreadores} y ninguno de los sistemas habituales de consentimiento. Estas herramientas necesitan el permiso del visitante antes de activarse; no pedirlo es uno de los motivos de sanción más frecuentes.",
-            "accion": "Instala un gestor de consentimiento que bloquee estas herramientas hasta que el visitante acepte.",
+            "accion": "Abre tu web en una ventana de incógnito: si aparece un aviso de cookies, es que se carga de una forma que no detectamos desde fuera y solo conviene comprobar que funciona. Si no aparece, instala un gestor de consentimiento que bloquee estas herramientas hasta que el visitante acepte.",
         },
         "mejorable": {
             "titulo": "Tienes aviso de cookies; conviene comprobar que bloquea de verdad",
@@ -315,6 +315,14 @@ PLANTILLAS: dict[str, dict] = {
             "titulo": "Es fácil contactar desde la portada",
             "explicacion": "Hay formas directas de contacto ({medios}).",
             "accion": "Nada que hacer.",
+        },
+    },
+    "con_contacto_enlace": {
+        "cat": "confianza", "peso": 3,
+        "mejorable": {
+            "titulo": "Para contactar hay que ir a otra página",
+            "explicacion": "La portada enlaza a una página de contacto, pero no hemos encontrado en ella un teléfono, un email ni un WhatsApp que se puedan pulsar. Cada paso de más hace que parte de la gente se quede por el camino.",
+            "accion": "Pon el teléfono o un botón de WhatsApp a la vista en la portada, arriba y en el pie.",
         },
     },
     "con_favicon": {

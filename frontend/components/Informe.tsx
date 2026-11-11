@@ -217,6 +217,13 @@ export default function Informe({ id }: { id: string }) {
         <p className="aviso">No hemos podido medir la velocidad en este análisis. El resto de comprobaciones sí están completas.</p>
       ) : null}
 
+      {r.contenido_dinamico ? (
+        <p className="aviso">
+          Esta web carga su contenido con JavaScript y desde fuera solo vemos una parte. Por eso no hemos comprobado
+          los textos legales ni el contacto: no queremos decirte que falta algo que quizá sí está.
+        </p>
+      ) : null}
+
       {urgentes.length > 0 ? (
         <section className="urgentes">
           <h2>Lo primero que arreglaríamos</h2>

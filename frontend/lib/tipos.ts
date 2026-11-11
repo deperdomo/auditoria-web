@@ -20,6 +20,7 @@ export interface Resultado {
   resumen: Record<Estado, number>;
   categorias: Categoria[];
   velocidad_medida: boolean;
+  contenido_dinamico?: boolean;
   url_final: string | null;
   tecnologia: string | null;
 }

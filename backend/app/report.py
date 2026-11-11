@@ -44,8 +44,10 @@ def evaluar(datos: dict[str, Any], psi: Optional[dict[str, Any]]) -> list[tuple[
     anadir("seo_titulo", "mal" if largo == 0 else "mejorable" if largo < 20 or largo > 65 else "bien", largo=largo, titulo=titulo)
     largo_d = datos.get("descripcion_len", 0)
     anadir("seo_descripcion", "mal" if largo_d == 0 else "mejorable" if largo_d < 70 or largo_d > 170 else "bien", largo=largo_d)
+    vacia = bool(datos.get("poco_contenido"))  # portada pintada con JavaScript: lo ausente no se puede afirmar
     h1 = datos.get("h1", 0)
-    anadir("seo_h1", "bien" if h1 == 1 else "mejorable", h1=h1)
+    if not vacia:
+        anadir("seo_h1", "bien" if h1 == 1 else "mejorable", h1=h1)
     anadir("seo_sitemap", "bien" if datos.get("sitemap") else "mejorable")
     tipos = datos.get("datos_estructurados") or []
     anadir("seo_datos", "bien" if tipos else "mejorable", tipos=", ".join(tipos[:4]))
@@ -62,15 +64,16 @@ def evaluar(datos: dict[str, Any], psi: Optional[dict[str, Any]]) -> list[tuple[
         anadir("leg_https", "mejorable")
     else:
         anadir("leg_https", "bien")
-    anadir("leg_aviso", "bien" if datos.get("aviso_legal") else "mal")
-    anadir("leg_privacidad", "bien" if datos.get("privacidad") else "mal")
+    if not vacia:
+        anadir("leg_aviso", "bien" if datos.get("aviso_legal") else "mal")
+        anadir("leg_privacidad", "bien" if datos.get("privacidad") else "mal")
     rastreadores = datos.get("rastreadores") or []
     nombres = ", ".join(rastreadores)
     if not rastreadores:
         anadir("leg_cookies", "bien")
     elif datos.get("gestor_cookies"):
         anadir("leg_cookies", "mejorable", rastreadores=nombres)
-    else:
+    elif not vacia:  # en una portada hueca el aviso lo pinta JavaScript: no se puede afirmar que falte
         anadir("leg_cookies", "mal", rastreadores=nombres)
 
     # Confianza
@@ -80,7 +83,9 @@ def evaluar(datos: dict[str, Any], psi: Optional[dict[str, Any]]) -> list[tuple[
         anadir("con_contacto", "bien", medios=", ".join(medios))
     elif datos.get("tel_en_texto"):
         anadir("con_contacto", "mejorable")
-    else:
+    elif datos.get("pagina_contacto"):
+        anadir("con_contacto_enlace", "mejorable")
+    elif not vacia:
         anadir("con_contacto", "mal")
     anadir("con_favicon", "bien" if datos.get("favicon") else "mejorable")
     return r
@@ -125,6 +130,7 @@ def construir_informe(datos: dict[str, Any], psi: Optional[dict[str, Any]]) -> d
         "resumen": resumen,
         "categorias": categorias,
         "velocidad_medida": psi is not None,
+        "contenido_dinamico": bool(datos.get("poco_contenido")),
         "url_final": datos.get("url_final"),
         "tecnologia": datos.get("tecnologia"),
     }

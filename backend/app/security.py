@@ -16,7 +16,7 @@ from urllib.parse import urljoin, urlsplit, urlunsplit
 import httpx
 
 USER_AGENT = "Mozilla/5.0 (compatible; AuditoriaWebBot/0.1)"
-MAX_BYTES = 2_000_000
+MAX_BYTES = 5_000_000
 MAX_REDIRECCIONES = 5
 
 
@@ -83,6 +83,7 @@ class Descarga:
     cabeceras: dict[str, str]
     ms: int
     saltos: list[str] = field(default_factory=list)
+    truncada: bool = False  # se cortó al llegar a max_bytes: lo que falte no se ha visto
 
 
 def descargar(url: str, *, max_bytes: int = MAX_BYTES, timeout: float = 12.0) -> Descarga:
@@ -118,6 +119,7 @@ def descargar(url: str, *, max_bytes: int = MAX_BYTES, timeout: float = 12.0) ->
                     cabeceras={k.lower(): v for k, v in r.headers.items()},
                     ms=int((time.monotonic() - inicio) * 1000),
                     saltos=saltos,
+                    truncada=total >= max_bytes,
                 )
     raise UrlNoValida("Esa web redirige demasiadas veces y no hemos podido abrirla.")
 

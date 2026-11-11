@@ -118,3 +118,25 @@ def test_api_completa(monkeypatch):
                      "vieron_ofertas": 1, "clic_oferta": 1, "dejaron_email": 1}
     assert s["ofertas"][0] == {"oferta": "pdf", "clics": 1, "emails": 1}
     assert s["totales"]["emails"] == 1
+
+
+def test_falsos_positivos_vistos_en_webs_reales():
+    """Casos sacados de portadas reales en las que el informe decía que faltaba algo que sí estaba."""
+    html = """<html lang="es"><head><title>x</title>
+    <script src="https://www.googletagmanager.com/gtm.js"></script>
+    <script>var c = {"eu_cookie_compliance": {}};</script></head><body>
+    <img src="a.svg" alt="" aria-hidden="true"><img src="b.svg" alt=""><img src="c.jpg"><img src="d.jpg" alt="Sala">
+    <a href="/general/condiciones-de-uso">Condiciones de uso</a> <a href="/privacy">Privacidad</a>
+    <a href="/contacto">Contacto</a> <a href="/servicios">Servicios</a></body></html>"""
+    datos = analizar_html(html, "https://e.es/")
+    assert datos["imagenes_sin_alt"] == 1          # alt="" es una imagen decorativa bien marcada
+    assert datos["aviso_legal"] and datos["gestor_cookies"] and not datos["poco_contenido"]
+    ids = {h["id"]: h["estado"] for c in construir_informe(datos, None)["categorias"] for h in c["hallazgos"]}
+    assert ids["leg_aviso"] == "bien" and ids["leg_cookies"] == "mejorable"
+    assert ids["con_contacto_enlace"] == "mejorable" and "con_contacto" not in ids
+
+    # Portada que pinta todo con JavaScript: no se afirma que falte lo que no se puede ver.
+    hueca = analizar_html("<html><head><title>Tienda</title></head><body><div id='root'></div></body></html>", "https://e.es/")
+    informe = construir_informe(hueca, None)
+    ids = {h["id"] for c in informe["categorias"] for h in c["hallazgos"]}
+    assert informe["contenido_dinamico"] and not ids & {"leg_aviso", "leg_privacidad", "con_contacto", "seo_h1"}
