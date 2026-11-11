@@ -115,7 +115,7 @@ Next.js 16 (App Router), React 19, TypeScript, CSS plano en `app/globals.css` (s
 | `app/informe/[id]/page.tsx` + `components/Informe.tsx` | Informe compartible; lleva `noindex` |
 | `components/Ofertas.tsx` + `lib/ofertas.ts` | Las tres puertas falsas y la ventana del email |
 | `app/admin/page.tsx` + `components/Panel.tsx` | Panel de comportamiento |
-| `app/privacidad/page.tsx` | Texto de privacidad, con huecos por completar |
+| `app/privacidad/page.tsx` | Texto de privacidad: nombre y email del titular, sin NIF ni domicilio |
 | `lib/track.ts` | Envío de eventos al backend y, si está configurado, a Umami |
 
 ### Seguimiento
@@ -175,12 +175,10 @@ En la base de datos de producción quedan cinco análisis de prueba del 11-11-20
 ## Pendiente, por orden
 
 1. Mirar el aspecto en el navegador (escritorio y móvil) y corregir lo que haga falta.
-2. Completar los datos del titular en `frontend/app/privacidad/page.tsx`. **Imprescindible antes del primer
-   envío**: ahora mismo la página pública muestra los huecos entre corchetes.
-3. Confirmar precios de las ofertas (`frontend/lib/ofertas.ts`).
-4. Antes de cada tanda, pasar 3 o 4 webs del sector y revisar a mano que los hallazgos son ciertos.
-5. Instalar Umami en el mismo servidor (opcional).
-6. Primera tanda de envíos.
+2. Confirmar precios de las ofertas (`frontend/lib/ofertas.ts`).
+3. Antes de cada tanda, pasar 3 o 4 webs del sector y revisar a mano que los hallazgos son ciertos.
+4. Instalar Umami en el mismo servidor (opcional).
+5. Primera tanda de envíos.
 
 Ideas aparcadas, no empezar sin consultarlo:
 
@@ -232,5 +230,9 @@ El repositorio está clonado en `/home/ubuntu/proyectos/auditoria-web` y **se si
 - **Caché:** una misma URL pedida por un visitante en menos de `CACHE_HOURS` devuelve el informe existente.
 - **RGPD:** la tabla `leads` contiene emails con su fecha de consentimiento. No exportarla ni subirla al
   repositorio; `backend/data/*.db` está en `.gitignore`.
+- **Titular sin NIF ni domicilio:** la página de privacidad identifica a Deivi solo con nombre y email. Es una
+  decisión suya (11-11-2026): no es autónomo y no quiere publicar su domicilio. Vale mientras no se cobre nada.
+  **Antes de poner un enlace de pago real** hay que revisarlo: cobrar exige darse de alta, y la LSSI pide entonces
+  nombre, NIF y domicilio en la web.
 - **Python:** el código es compatible con 3.10 o superior.
 - **Aviso de pytest** sobre `httpx` y `starlette.testclient`: es una advertencia de obsolescencia, no un fallo.

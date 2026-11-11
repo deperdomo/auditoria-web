@@ -96,7 +96,6 @@ de cada informe. El panel separa el embudo por sector.
 
 ## Antes de publicar
 
-- Completa los datos entre corchetes de `frontend/app/privacidad/page.tsx`.
 - Revisa precios y textos de las ofertas en `frontend/lib/ofertas.ts`.
 - Revisa el tono de los textos del informe en `backend/app/plantillas.py`.
 - `BACKEND_URL` se fija al compilar el frontend (`npm run build`), no al arrancarlo.
