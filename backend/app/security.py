@@ -63,9 +63,9 @@ def comprobar_host_publico(host: str) -> None:
     try:
         infos = socket.getaddrinfo(host, None, type=socket.SOCK_STREAM)
     except (socket.gaierror, UnicodeError):
-        raise UrlNoValida("No hemos encontrado ese dominio. Revisa que esté bien escrito.")
+        raise UrlNoValida("No se ha encontrado ese dominio. Revisa que esté bien escrito.")
     if not infos:
-        raise UrlNoValida("No hemos encontrado ese dominio. Revisa que esté bien escrito.")
+        raise UrlNoValida("No se ha encontrado ese dominio. Revisa que esté bien escrito.")
     for info in infos:
         texto = str(info[4][0]).split("%")[0]
         ip = ipaddress.ip_address(texto)
@@ -121,7 +121,7 @@ def descargar(url: str, *, max_bytes: int = MAX_BYTES, timeout: float = 12.0) ->
                     saltos=saltos,
                     truncada=total >= max_bytes,
                 )
-    raise UrlNoValida("Esa web redirige demasiadas veces y no hemos podido abrirla.")
+    raise UrlNoValida("Esa web redirige demasiadas veces y no se ha podido abrir.")
 
 
 class LimitePorIp:

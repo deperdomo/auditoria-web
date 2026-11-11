@@ -124,7 +124,7 @@ def analizar_html(html: str, url_final: str) -> dict[str, Any]:
         "whatsapp": any("wa.me/" in h or "api.whatsapp.com" in h for h in hrefs),
         "pagina_contacto": hay_enlace("contacto", "contacta", "contáctanos", "contact"),
         # Portada casi vacía: el contenido lo pinta JavaScript y aquí no se ve. Sin enlaces, imágenes ni texto,
-        # «no hemos encontrado X» no significa nada, así que esas comprobaciones se omiten.
+        # «no se ha encontrado X» no significa nada, así que esas comprobaciones se omiten.
         "poco_contenido": len(enlaces) < 3 and not imagenes and len(texto_visible) < 300,
         "rastreadores": [nombre for nombre, marcas in RASTREADORES.items() if any(m in bajo for m in marcas)],
         "gestor_cookies": any(g in bajo for g in GESTORES_COOKIES),
@@ -149,13 +149,13 @@ def recoger_datos(url: str) -> dict[str, Any]:
             try:
                 portada = descargar("http://" + url[len("https://"):])
             except httpx.HTTPError:
-                raise UrlNoValida("No hemos podido abrir esa web. Comprueba que la dirección es correcta y que funciona.")
+                raise UrlNoValida("No se ha podido abrir esa web. Comprueba que la dirección es correcta y que funciona.")
         else:
-            raise UrlNoValida("No hemos podido abrir esa web. Comprueba que la dirección es correcta y que funciona.")
+            raise UrlNoValida("No se ha podido abrir esa web. Comprueba que la dirección es correcta y que funciona.")
     if portada.estado in (401, 403, 429):
-        raise UrlNoValida("Esa web no deja que la revisen herramientas automáticas, así que no podemos analizarla.")
+        raise UrlNoValida("Esa web no deja que la revisen herramientas automáticas, así que no se puede analizar.")
     if portada.truncada:
-        raise UrlNoValida("La portada de esa web pesa demasiado para analizarla entera, y no queremos darte un informe a medias.")
+        raise UrlNoValida("La portada de esa web pesa demasiado para analizarla entera, y un informe a medias no sería fiable.")
     if portada.estado >= 400:
         raise UrlNoValida(f"La web ha respondido con un error ({portada.estado}) y no se puede analizar.")
     if "<html" not in portada.texto.lower() and "<body" not in portada.texto.lower():

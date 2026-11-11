@@ -28,7 +28,7 @@ export default function Ofertas({ auditId, dominio }: { auditId: string; dominio
     evento.preventDefault();
     if (!abierta) return;
     if (!consiente) {
-      setError("Marca la casilla para que podamos guardar tu email.");
+      setError("Marca la casilla para que pueda guardar tu email.");
       return;
     }
     setEstado("enviando");
@@ -41,14 +41,14 @@ export default function Ofertas({ auditId, dominio }: { auditId: string; dominio
       });
       if (!r.ok) {
         const datos = await r.json().catch(() => ({}));
-        setError(typeof datos.detail === "string" ? datos.detail : "No hemos podido guardar tu email.");
+        setError(typeof datos.detail === "string" ? datos.detail : "No se ha podido guardar tu email.");
         setEstado("inicial");
         return;
       }
       track("lead_submit", { door: abierta.id }, auditId);
       setEstado("hecho");
     } catch {
-      setError("No hemos podido conectar. Inténtalo de nuevo.");
+      setError("No se ha podido conectar. Inténtalo de nuevo.");
       setEstado("inicial");
     }
   }
@@ -78,7 +78,7 @@ export default function Ofertas({ auditId, dominio }: { auditId: string; dominio
             </button>
             <h3 id="titulo-modal">{abierta.titulo}</h3>
             {estado === "hecho" ? (
-              <p>Gracias. Te escribiremos a {email}.</p>
+              <p>Gracias. Te escribiré a {email}.</p>
             ) : (
               <form onSubmit={enviar} noValidate>
                 <p>{abierta.aviso}</p>
@@ -94,7 +94,7 @@ export default function Ofertas({ auditId, dominio }: { auditId: string; dominio
                 <label className="casilla">
                   <input type="checkbox" checked={consiente} onChange={(e) => setConsiente(e.target.checked)} />
                   <span>
-                    Acepto que guardéis mi email para este aviso. <Link href="/privacidad" target="_blank">Privacidad</Link>
+                    Acepto que guardes mi email para este aviso. <Link href="/privacidad" target="_blank">Privacidad</Link>
                   </span>
                 </label>
                 {error ? (
@@ -103,7 +103,7 @@ export default function Ofertas({ auditId, dominio }: { auditId: string; dominio
                   </p>
                 ) : null}
                 <button type="submit" disabled={estado === "enviando"}>
-                  {estado === "enviando" ? "Enviando…" : "Avisadme"}
+                  {estado === "enviando" ? "Enviando…" : "Avísame"}
                 </button>
               </form>
             )}

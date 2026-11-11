@@ -174,7 +174,7 @@ PLANTILLAS: dict[str, dict] = {
         "cat": "google", "peso": 1,
         "mejorable": {
             "titulo": "La portada no tiene un titular principal claro",
-            "explicacion": "Hemos encontrado {h1} titulares principales y debería haber exactamente uno. Es lo que le dice a Google (y al visitante) de qué va la página.",
+            "explicacion": "Se han encontrado {h1} titulares principales y debería haber exactamente uno. Es lo que le dice a Google (y al visitante) de qué va la página.",
             "accion": "Deja un único titular principal con tu servicio y tu zona.",
         },
         "bien": {
@@ -186,7 +186,7 @@ PLANTILLAS: dict[str, dict] = {
     "seo_sitemap": {
         "cat": "google", "peso": 1,
         "mejorable": {
-            "titulo": "No hemos encontrado el mapa del sitio",
+            "titulo": "No se ha encontrado el mapa del sitio",
             "explicacion": "Es un archivo que le dice a Google qué páginas tiene tu web. Sin él, puede tardar más en descubrir las nuevas.",
             "accion": "Genera un sitemap.xml (casi todos los gestores lo hacen solos) y envíalo en Google Search Console.",
         },
@@ -257,7 +257,7 @@ PLANTILLAS: dict[str, dict] = {
     "leg_aviso": {
         "cat": "legal", "peso": 2,
         "mal": {
-            "titulo": "No hemos encontrado el aviso legal",
+            "titulo": "No se ha encontrado el aviso legal",
             "explicacion": "En la portada no hay ningún enlace a un aviso legal. Si la web es de un negocio, la ley española (LSSI) obliga a identificar al titular: nombre o razón social, NIF, domicilio y contacto.",
             "accion": "Añade una página de aviso legal y enlázala en el pie. Si ya existe, comprueba que el enlace se ve.",
         },
@@ -270,7 +270,7 @@ PLANTILLAS: dict[str, dict] = {
     "leg_privacidad": {
         "cat": "legal", "peso": 2,
         "mal": {
-            "titulo": "No hemos encontrado la política de privacidad",
+            "titulo": "No se ha encontrado la política de privacidad",
             "explicacion": "Si la web recoge datos (un formulario de contacto ya cuenta), el RGPD obliga a explicar qué se hace con ellos. En la portada no hay ningún enlace.",
             "accion": "Añade una política de privacidad y enlázala en el pie y junto a cada formulario.",
         },
@@ -283,17 +283,17 @@ PLANTILLAS: dict[str, dict] = {
     "leg_cookies": {
         "cat": "legal", "peso": 3,
         "mal": {
-            "titulo": "Usas herramientas de seguimiento y no vemos aviso de cookies",
-            "explicacion": "Hemos detectado {rastreadores} y ninguno de los sistemas habituales de consentimiento. Estas herramientas necesitan el permiso del visitante antes de activarse; no pedirlo es uno de los motivos de sanción más frecuentes.",
-            "accion": "Abre tu web en una ventana de incógnito: si aparece un aviso de cookies, es que se carga de una forma que no detectamos desde fuera y solo conviene comprobar que funciona. Si no aparece, instala un gestor de consentimiento que bloquee estas herramientas hasta que el visitante acepte.",
+            "titulo": "Usas herramientas de seguimiento y no se ve aviso de cookies",
+            "explicacion": "Se ha detectado el uso de {rastreadores}, pero ninguno de los sistemas habituales de consentimiento. Estas herramientas necesitan el permiso del visitante antes de activarse; no pedirlo es uno de los motivos de sanción más frecuentes.",
+            "accion": "Abre tu web en una ventana de incógnito: si aparece un aviso de cookies, es que se carga de una forma que no se detecta desde fuera y solo conviene comprobar que funciona. Si no aparece, instala un gestor de consentimiento que bloquee estas herramientas hasta que el visitante acepte.",
         },
         "mejorable": {
             "titulo": "Tienes aviso de cookies; conviene comprobar que bloquea de verdad",
-            "explicacion": "Hemos detectado {rastreadores} y un sistema de consentimiento. Desde fuera no podemos confirmar que las herramientas esperen al «Aceptar»: es un fallo muy común que el banner sea solo decorativo.",
+            "explicacion": "Se ha detectado el uso de {rastreadores} y un sistema de consentimiento. Desde fuera no se puede confirmar que las herramientas esperen al «Aceptar»: es un fallo muy común que el banner sea solo decorativo.",
             "accion": "Abre la web en una ventana de incógnito y comprueba que nada se activa antes de aceptar.",
         },
         "bien": {
-            "titulo": "No hemos detectado herramientas de seguimiento",
+            "titulo": "No se han detectado herramientas de seguimiento",
             "explicacion": "En la portada no aparecen las herramientas de analítica o publicidad más habituales, así que no hace falta pedir consentimiento por ellas.",
             "accion": "Si instalas analítica o píxeles de publicidad, recuerda añadir el aviso.",
         },
@@ -303,7 +303,7 @@ PLANTILLAS: dict[str, dict] = {
         "cat": "confianza", "peso": 3,
         "mal": {
             "titulo": "No hay forma rápida de contactar desde la portada",
-            "explicacion": "No hemos encontrado teléfono, email ni WhatsApp en la portada. Quien llega con prisa y no ve cómo contactar, se va a otra web.",
+            "explicacion": "No se ha encontrado teléfono, email ni WhatsApp en la portada. Quien llega con prisa y no ve cómo contactar, se va a otra web.",
             "accion": "Pon el teléfono y un botón de contacto bien visibles arriba y en el pie.",
         },
         "mejorable": {
@@ -321,7 +321,7 @@ PLANTILLAS: dict[str, dict] = {
         "cat": "confianza", "peso": 3,
         "mejorable": {
             "titulo": "Para contactar hay que ir a otra página",
-            "explicacion": "La portada enlaza a una página de contacto, pero no hemos encontrado en ella un teléfono, un email ni un WhatsApp que se puedan pulsar. Cada paso de más hace que parte de la gente se quede por el camino.",
+            "explicacion": "La portada enlaza a una página de contacto, pero no se ha encontrado en ella un teléfono, un email ni un WhatsApp que se puedan pulsar. Cada paso de más hace que parte de la gente se quede por el camino.",
             "accion": "Pon el teléfono o un botón de WhatsApp a la vista en la portada, arriba y en el pie.",
         },
     },

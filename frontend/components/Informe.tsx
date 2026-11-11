@@ -155,7 +155,7 @@ export default function Informe({ id }: { id: string }) {
   if (fallo) {
     return (
       <section className="estado-pagina">
-        <h1>No hemos podido mostrar el informe</h1>
+        <h1>No se ha podido mostrar el informe</h1>
         <p>{fallo}</p>
         <Link href="/" className="boton-secundario">Analizar otra web</Link>
       </section>
@@ -176,7 +176,7 @@ export default function Informe({ id }: { id: string }) {
   if (datos.status === "error" || !datos.result) {
     return (
       <section className="estado-pagina">
-        <h1>No hemos podido analizar {datos.domain}</h1>
+        <h1>No se ha podido analizar {datos.domain}</h1>
         <p>{datos.error ?? "Ha ocurrido un problema inesperado."}</p>
         <Link href="/" className="boton-secundario">Probar con otra dirección</Link>
       </section>
@@ -214,19 +214,19 @@ export default function Informe({ id }: { id: string }) {
       </header>
 
       {!r.velocidad_medida ? (
-        <p className="aviso">No hemos podido medir la velocidad en este análisis. El resto de comprobaciones sí están completas.</p>
+        <p className="aviso">No se ha podido medir la velocidad en este análisis. El resto de comprobaciones sí están completas.</p>
       ) : null}
 
       {r.contenido_dinamico ? (
         <p className="aviso">
-          Esta web carga su contenido con JavaScript y desde fuera solo vemos una parte. Por eso no hemos comprobado
-          los textos legales ni el contacto: no queremos decirte que falta algo que quizá sí está.
+          Esta web carga su contenido con JavaScript y desde fuera solo se ve una parte. Por eso no se han comprobado
+          los textos legales ni el contacto: así no se afirma que falta algo que quizá sí está.
         </p>
       ) : null}
 
       {urgentes.length > 0 ? (
         <section className="urgentes">
-          <h2>Lo primero que arreglaríamos</h2>
+          <h2>Lo primero que conviene arreglar</h2>
           <ol>
             {urgentes.slice(0, 3).map((h) => (
               <li key={h.id}>{h.titulo}</li>

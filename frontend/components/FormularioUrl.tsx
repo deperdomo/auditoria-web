@@ -29,7 +29,7 @@ export default function FormularioUrl() {
       });
       const datos = await r.json().catch(() => ({}));
       if (!r.ok) {
-        const mensaje = typeof datos.detail === "string" ? datos.detail : "No hemos podido analizar esa dirección.";
+        const mensaje = typeof datos.detail === "string" ? datos.detail : "No se ha podido analizar esa dirección.";
         track("url_error", { codigo: r.status });
         setError(mensaje);
         setEnviando(false);
@@ -38,7 +38,7 @@ export default function FormularioUrl() {
       router.push(`/informe/${datos.id}`);
     } catch {
       track("url_error", { codigo: 0 });
-      setError("No hemos podido conectar. Inténtalo de nuevo en un momento.");
+      setError("No se ha podido conectar. Inténtalo de nuevo en un momento.");
       setEnviando(false);
     }
   }

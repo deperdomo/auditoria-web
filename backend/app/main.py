@@ -127,7 +127,7 @@ def registrar_evento(evento: Evento, request: Request) -> None:
 @app.post("/api/leads", status_code=201)
 def registrar_contacto(contacto: Contacto, request: Request) -> dict[str, bool]:
     if not contacto.consent:
-        raise HTTPException(status_code=422, detail="Necesitamos tu consentimiento para guardar el email.")
+        raise HTTPException(status_code=422, detail="Necesito tu consentimiento para guardar el email.")
     email = contacto.email.strip().lower()
     if not EMAIL.match(email):
         raise HTTPException(status_code=422, detail="Ese email no parece válido.")

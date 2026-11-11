@@ -6,7 +6,7 @@ export default function Inicio() {
       <p className="antetitulo">Gratis · sin registro · un minuto</p>
       <h1>¿Qué está frenando a tu web?</h1>
       <p className="entradilla">
-        Escribe la dirección y te decimos, sin tecnicismos, qué le impide traerte más clientes: velocidad, móvil,
+        Escribe la dirección y verás, sin tecnicismos, qué le impide traerte más clientes: velocidad, móvil,
         Google, textos legales y contacto.
       </p>
       <FormularioUrl />
