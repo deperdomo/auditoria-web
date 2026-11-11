@@ -1,0 +1,17 @@
+[Unit]
+Description=Auditoría web: frontend (Next.js)
+After=network-online.target auditoria-backend.service
+Wants=network-online.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/proyectos/auditoria-web/frontend
+Environment=NODE_ENV=production
+# Solo 127.0.0.1: el único camino de entrada es el túnel de Cloudflare. Si escuchara en todas las
+# interfaces, alguien podría llegar directo con un X-Forwarded-For inventado y saltarse el límite por IP.
+ExecStart=/usr/bin/node node_modules/next/dist/bin/next start -H 127.0.0.1 -p 3000
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

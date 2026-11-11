@@ -63,8 +63,10 @@ lanzamiento y entregar el informe a mano. Un pago real vale más que muchos emai
 ## Arquitectura
 
 ```
-navegador ──> frontend Next.js (puerto 3000) ──/api/*──> backend FastAPI (127.0.0.1:8000) ──> SQLite
+navegador ──> Cloudflare ──túnel──> frontend Next.js (127.0.0.1:3000) ──/api/*──> backend FastAPI (127.0.0.1:8000) ──> SQLite
 ```
+
+En producción: https://auditoria.deiviperdomo.dev. En local no hay Cloudflare ni túnel; el resto es igual.
 
 - El navegador solo habla con el frontend. `frontend/next.config.ts` reenvía `/api/*` al backend, así que no
   hay CORS y el backend no se expone a internet.
@@ -129,27 +131,49 @@ disponible y pide el email con casilla de consentimiento.
 
 ## Estado actual
 
+Publicado en **https://auditoria.deiviperdomo.dev** desde el 11-11-2026 (ver «Despliegue»).
+
 Hecho y comprobado:
 
-- Los 4 tests del backend pasan (`cd backend && python -m pytest`).
-- El frontend compila (`npm run build`).
-- El flujo completo a través del frontend funciona con un informe de prueba insertado a mano: leer informe,
-  registrar evento, guardar email, estadísticas.
+- Los 5 tests del backend pasan (`cd backend && .venv/bin/python -m pytest`).
+- **Análisis contra webs reales.** Se pasaron unas 15 webs españolas (restaurantes, clínicas, despachos, tiendas)
+  revisando el HTML de cada hallazgo dudoso. Falsos positivos encontrados y corregidos:
+  - `alt=""` es la forma correcta de marcar una imagen decorativa; solo cuenta la imagen sin atributo `alt`.
+  - «Condiciones de uso», «información legal», `terms`, `/legal`... cuentan como aviso legal.
+  - Más gestores de cookies reconocidos (módulo de Drupal, banner de Shopify, banners propios, Consent Mode).
+  - **Portada hueca** (`poco_contenido`: sin enlaces, sin imágenes y casi sin texto): es una web que lo pinta todo
+    con JavaScript. No se afirma que falten aviso legal, privacidad, contacto, titular ni aviso de cookies, y el
+    informe lo explica (`contenido_dinamico`).
+  - Solo un enlace a «Contacto», sin teléfono ni email pulsables: «mejorable» (`con_contacto_enlace`), no «mal».
+  - Sin etiqueta de icono se comprueba `/favicon.ico`, que es lo que hacen los navegadores.
+  - Webs que bloquean bots (401/403/429) y portadas de más de 5 MB: mensaje de error claro en vez de un informe
+    a medias. No falsificar el `User-Agent` para saltarse el bloqueo.
+- El flujo completo en producción: análisis, caché, eventos, emails con consentimiento, panel, redirección de
+  `http://` a `https://`.
+- El límite por IP a través de Cloudflare: seis peticiones con un `X-Forwarded-For` inventado y distinto cada vez
+  acaban en 429.
 
 **Sin comprobar todavía:**
 
-- **Ningún análisis contra una web real.** El entorno donde se escribió no resolvía dominios externos. Es lo
-  primero que hay que probar: pasar varias webs conocidas y revisar que los hallazgos son ciertos.
-- La llamada real a PageSpeed (los nombres de las métricas se tomaron de la API v5; verificar que llegan).
-- El aspecto en un navegador. El CSS se escribió sin verlo renderizado.
+- La llamada real a PageSpeed: falta la clave. Sin clave la API de Google responde «cuota agotada», así que no se
+  han podido verificar los nombres de las métricas de `pagespeed.interpretar`.
+- El aspecto en un navegador. Solo se ha comprobado que todas las clases usadas tienen regla en `globals.css`.
+- El aviso de cookies cuando el banner se carga desde Tag Manager (visto en una tienda grande): sale como «no vemos
+  aviso de cookies». El texto de «Qué hacer» ya avisa de esa posibilidad; la solución de verdad es la comprobación
+  con Playwright, que sigue aparcada.
+
+En la base de datos de producción quedan cinco análisis de prueba del 11-11-2026 (`example.com`, `example.org`,
+`example.net`, `iana.org`, `wikipedia.org`, con `source='web'`). No tienen eventos ni emails asociados.
 
 ## Pendiente, por orden
 
-1. Probar en local con webs reales y corregir falsos positivos y textos que suenen mal.
-2. Conseguir la clave de PageSpeed y ponerla en `backend/.env`.
-3. Confirmar precios de las ofertas (`frontend/lib/ofertas.ts`).
-4. Completar los datos del titular en `frontend/app/privacidad/page.tsx`.
-5. Desplegar en el servidor de Oracle (ver abajo).
+1. Conseguir la clave de PageSpeed, ponerla en `backend/.env` y reiniciar el backend. Revisar un informe con
+   velocidad medida.
+2. Mirar el aspecto en el navegador (escritorio y móvil) y corregir lo que haga falta.
+3. Completar los datos del titular en `frontend/app/privacidad/page.tsx`. **Imprescindible antes del primer
+   envío**: ahora mismo la página pública muestra los huecos entre corchetes.
+4. Confirmar precios de las ofertas (`frontend/lib/ofertas.ts`).
+5. Antes de cada tanda, pasar 3 o 4 webs del sector y revisar a mano que los hallazgos son ciertos.
 6. Instalar Umami en el mismo servidor (opcional).
 7. Primera tanda de envíos.
 
@@ -163,31 +187,37 @@ Ideas aparcadas, no empezar sin consultarlo:
 
 ## Despliegue en el servidor de Oracle
 
-Decisión tomada: **todo en el servidor Ubuntu de Oracle Cloud, no en Vercel**. Motivos: el backend necesita
-disco persistente (SQLite) y tareas en segundo plano, y el plan gratuito de Vercel no admite uso comercial.
+Todo corre en el servidor Ubuntu de Oracle Cloud (ARM, 4 núcleos, 24 GB), no en Vercel. Motivos: el backend
+necesita disco persistente (SQLite) y tareas en segundo plano, y el plan gratuito de Vercel no admite uso comercial.
 
-Diseño previsto, **aún sin hacer**:
+El repositorio está clonado en `/home/ubuntu/proyectos/auditoria-web` y **se sirve desde ahí mismo**.
 
-1. Un subdominio de `deiviperdomo.dev` con un registro A a la IP del servidor.
-2. Caddy delante con HTTPS automático, reenviando al frontend en el puerto 3000. Debe añadir `X-Forwarded-For`
-   (Caddy lo hace por defecto).
-3. Dos servicios de systemd: `uvicorn app.main:app --host 127.0.0.1 --port 8000` y `next start`.
-4. Un script de despliegue: `git pull`, instalar dependencias, `npm run build`, reiniciar los servicios.
-5. Copia diaria del archivo SQLite (contiene los emails y todo el registro de comportamiento).
-6. Abrir los puertos 80 y 443 tanto en la lista de seguridad de Oracle como en el cortafuegos de la instancia.
-
-No se conoce el tamaño de la instancia. Si tiene 1 GB de memoria, `next build` puede necesitar swap.
-
-En el servidor, `backend/.env` necesita: `ADMIN_TOKEN` largo y aleatorio, `PAGESPEED_API_KEY`,
-`TRUST_PROXY=true` y `PUBLIC_BASE_URL` con el dominio público.
+- **Entrada: túnel de Cloudflare, no Caddy.** El plan inicial era Caddy con un registro A, pero el servidor tiene
+  los puertos 80 y 443 cerrados y sus otros proyectos ya salen por `cloudflared`. El subdominio es una entrada más
+  en `/etc/cloudflared/config.yml` (`auditoria.deiviperdomo.dev` → `http://localhost:3000`) y un CNAME creado con
+  `cloudflared tunnel route dns`. Ese archivo lo comparten otros proyectos: copiarlo antes de tocarlo y validar
+  con `cloudflared tunnel ingress validate`; reiniciar `cloudflared` los corta unos segundos a todos.
+- **Servicios de systemd:** `auditoria-backend` (uvicorn, un solo proceso) y `auditoria-frontend` (`next start`).
+  Los dos escuchan solo en `127.0.0.1`. Las unidades están en `deploy/` y copiadas en `/etc/systemd/system/`.
+  Registros: `journalctl -u auditoria-backend -f`.
+- **Desplegar cambios:** `deploy/desplegar.sh` (git pull, dependencias, tests, compilar, reiniciar, comprobar).
+- **Copia diaria** de SQLite: `deploy/copia.sh` desde el cron del usuario `ubuntu` a las 03:15, en
+  `~/backups/auditoria-web/`, 30 días. Está en el mismo disco: no protege de perder el servidor.
+- **`backend/.env`** (no está en git): `ADMIN_TOKEN` aleatorio ya puesto, `TRUST_PROXY=true`, `PUBLIC_BASE_URL`
+  con el dominio público. Falta `PAGESPEED_API_KEY`.
+- **Entorno de Python:** el servidor no tiene `python3-venv` y el índice de apt está desfasado. El `.venv` se creó
+  con `python3 -m venv --without-pip .venv` y `get-pip.py`. No hace falta repetirlo salvo que se borre.
 
 ## Detalles que conviene saber antes de tocar
 
 - **`BACKEND_URL` se fija al compilar** el frontend, no al arrancarlo. Si cambia, hay que volver a compilar.
-- **IP del visitante:** con `TRUST_PROXY=true` se toma la *última* IP de `X-Forwarded-For`, la que añade el
-  proxy propio; las anteriores las puede falsificar el visitante. Si algún día se pone Cloudflare delante, esto
-  hay que cambiarlo (la última sería la de Cloudflare). Sin proxy delante, Next no añade la cabecera y todas las
-  visitas cuentan como `127.0.0.1`: en local, subir `RATE_LIMIT_PER_HOUR`.
+- **IP del visitante:** con `TRUST_PROXY=true` se toma la *última* IP de `X-Forwarded-For`. Cloudflare añade ahí
+  la IP real del visitante al final y Next reenvía la cabecera sin tocarla; las anteriores las puede falsificar
+  el visitante. Esto solo es seguro porque Next escucha en `127.0.0.1` y el único camino de entrada es el túnel:
+  si algún día se abre el puerto 3000 o se pone otro proxy delante, hay que revisarlo. En local, sin proxy, no
+  llega la cabecera y todas las visitas cuentan como `127.0.0.1`: subir `RATE_LIMIT_PER_HOUR`.
+- **Redirección a HTTPS:** la hace `next.config.ts` leyendo la cabecera `cf-visitor` de Cloudflare. En local no
+  existe y no se redirige nada.
 - **Límite por IP en memoria:** se reinicia con el backend y no funciona con varios procesos. Arrancar
   `uvicorn` con un solo worker.
 - **SSRF:** el servidor descarga URLs que escribe cualquiera. `security.py` rechaza IPs literales, puertos que

@@ -33,11 +33,30 @@ Abre http://localhost:3000. El panel está en http://localhost:3000/admin (pide 
 
 Tests del backend: `cd backend` y `python -m pytest`.
 
+## En el servidor
+
+Está publicado en https://auditoria.deiviperdomo.dev, en el servidor de Oracle, detrás de un túnel de Cloudflare.
+
+```bash
+deploy/desplegar.sh                            # actualizar con lo último de main
+sudo systemctl restart auditoria-backend       # tras cambiar backend/.env
+journalctl -u auditoria-backend -f             # registros (o auditoria-frontend)
+```
+
+La base de datos se copia cada noche en `~/backups/auditoria-web/` (`deploy/copia.sh`). Los detalles del
+despliegue están en `CLAUDE.md`.
+
 ## Clave de PageSpeed
 
-Sin `PAGESPEED_API_KEY` todo funciona menos la medición de velocidad. Para obtenerla: Google Cloud Console >
-crear proyecto > APIs y servicios > habilitar «PageSpeed Insights API» > Credenciales > crear clave de API.
-Es gratuita.
+Sin `PAGESPEED_API_KEY` todo funciona menos la medición de velocidad. Es gratuita y no pide tarjeta:
+
+1. Entra en https://console.cloud.google.com con tu cuenta de Google y crea un proyecto (o elige uno).
+2. Menú > «APIs y servicios» > «Biblioteca», busca **PageSpeed Insights API** y pulsa «Habilitar».
+3. «APIs y servicios» > «Credenciales» > «Crear credenciales» > «Clave de API».
+4. En la clave, «Restricciones de API» > «Restringir clave» > marca solo PageSpeed Insights API.
+5. Pégala en `backend/.env` (`PAGESPEED_API_KEY=...`) y reinicia el backend.
+
+`/api/health` devuelve `"mide_velocidad": true` cuando la clave está cargada.
 
 ## Qué se registra de cada visitante
 
@@ -77,13 +96,14 @@ de cada informe. El panel separa el embudo por sector.
 - Completa los datos entre corchetes de `frontend/app/privacidad/page.tsx`.
 - Revisa precios y textos de las ofertas en `frontend/lib/ofertas.ts`.
 - Revisa el tono de los textos del informe en `backend/app/plantillas.py`.
-- En el servidor: el backend escuchando solo en `127.0.0.1`, y nginx o Caddy delante del frontend con HTTPS
-  (el proxy debe añadir `X-Forwarded-For` para que el límite por IP funcione).
 - `BACKEND_URL` se fija al compilar el frontend (`npm run build`), no al arrancarlo.
 
 ## Limitaciones conocidas
 
 - Solo se analiza la portada.
+- Las webs que bloquean herramientas automáticas y las portadas de más de 5 MB no se analizan: se dice tal cual.
+- Si la portada lo pinta todo con JavaScript, no se comprueban los textos legales ni el contacto, y el informe
+  lo avisa.
 - El aviso legal, la privacidad y el contacto se buscan en el HTML inicial; si la web los pinta con JavaScript,
   pueden salir como «no encontrados».
 - Las cookies se detectan por los scripts presentes, sin abrir un navegador real. No confirma si el banner
