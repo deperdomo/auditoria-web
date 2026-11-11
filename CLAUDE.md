@@ -12,11 +12,15 @@ Repositorio: https://github.com/deperdomo/auditoria-web — rama `main`.
 - **Idioma:** todo lo que ve el usuario final va en castellano de España. El código también usa nombres en
   castellano (funciones, variables, tablas de texto); mantener esa convención. Los nombres de eventos y de
   columnas de la base de datos están en inglés (`report_view`, `audits`...): no renombrarlos.
+- **Tono:** lo que hace la herramienta va en impersonal («no se ha encontrado», «se ha detectado», «no se ha
+  podido abrir»): quien no encuentra el aviso legal es la herramienta, no Deivi. Lo que hace Deivi (ofertas,
+  guardar el email, privacidad) va en primera persona del singular («déjame tu email y te aviso»). Nunca
+  «nosotros». Al visitante se le trata de tú.
 - **Sin IA en el análisis.** Las comprobaciones son reglas fijas y los textos salen de plantillas. Es una decisión
   de coste y de fiabilidad (la misma web debe dar siempre el mismo resultado). Si algún día se añade un modelo
   de lenguaje, solo en el informe de pago, nunca en la parte gratuita.
 - **Coste cero.** No añadir servicios de pago ni dependencias que obliguen a ello sin consultarlo.
-- **Honestidad en el informe.** Lo que no se puede comprobar desde fuera se dice con cautela («no hemos
+- **Honestidad en el informe.** Lo que no se puede comprobar desde fuera se dice con cautela («no se ha
   encontrado», «conviene comprobar»). Nada de cifras inventadas ni de alarmismo.
 
 ## Qué es y para qué
@@ -121,7 +125,10 @@ Next.js 16 (App Router), React 19, TypeScript, CSS plano en `app/globals.css` (s
 - La lista de eventos está en el `README.md`. `trackUnaVez` evita duplicados.
 - Las visitas del propio Deivi se excluyen: entrar en `/admin` marca el navegador, o `?notrack=1` en cualquier
   página (`?notrack=0` lo deshace).
-- Umami es opcional y aún no está instalado. La fuente de verdad es la tabla `events`.
+- **Cloudflare Web Analytics** cuenta visitas y páginas vistas de `auditoria.deiviperdomo.dev`. El fragmento
+  está en `frontend/app/layout.tsx` y solo se carga en producción. No usa cookies y la página de privacidad lo
+  menciona. No respeta `?notrack=1`: ahí las visitas de Deivi sí cuentan, y quien use bloqueador no aparece.
+- Umami es opcional y aún no está instalado. La fuente de verdad del comportamiento es la tabla `events`.
 
 ### Las tres puertas falsas
 
@@ -150,15 +157,15 @@ Hecho y comprobado:
     a medias. No falsificar el `User-Agent` para saltarse el bloqueo.
 - El flujo completo en producción: análisis, caché, eventos, emails con consentimiento, panel, redirección de
   `http://` a `https://`.
+- **La llamada real a PageSpeed**, con la clave ya puesta: responde en unos 15 s y llegan todas las métricas
+  que espera `pagespeed.interpretar`.
 - El límite por IP a través de Cloudflare: seis peticiones con un `X-Forwarded-For` inventado y distinto cada vez
   acaban en 429.
 
 **Sin comprobar todavía:**
 
-- La llamada real a PageSpeed: falta la clave. Sin clave la API de Google responde «cuota agotada», así que no se
-  han podido verificar los nombres de las métricas de `pagespeed.interpretar`.
 - El aspecto en un navegador. Solo se ha comprobado que todas las clases usadas tienen regla en `globals.css`.
-- El aviso de cookies cuando el banner se carga desde Tag Manager (visto en una tienda grande): sale como «no vemos
+- El aviso de cookies cuando el banner se carga desde Tag Manager (visto en una tienda grande): sale como «no se ve
   aviso de cookies». El texto de «Qué hacer» ya avisa de esa posibilidad; la solución de verdad es la comprobación
   con Playwright, que sigue aparcada.
 
@@ -167,15 +174,13 @@ En la base de datos de producción quedan cinco análisis de prueba del 11-11-20
 
 ## Pendiente, por orden
 
-1. Conseguir la clave de PageSpeed, ponerla en `backend/.env` y reiniciar el backend. Revisar un informe con
-   velocidad medida.
-2. Mirar el aspecto en el navegador (escritorio y móvil) y corregir lo que haga falta.
-3. Completar los datos del titular en `frontend/app/privacidad/page.tsx`. **Imprescindible antes del primer
+1. Mirar el aspecto en el navegador (escritorio y móvil) y corregir lo que haga falta.
+2. Completar los datos del titular en `frontend/app/privacidad/page.tsx`. **Imprescindible antes del primer
    envío**: ahora mismo la página pública muestra los huecos entre corchetes.
-4. Confirmar precios de las ofertas (`frontend/lib/ofertas.ts`).
-5. Antes de cada tanda, pasar 3 o 4 webs del sector y revisar a mano que los hallazgos son ciertos.
-6. Instalar Umami en el mismo servidor (opcional).
-7. Primera tanda de envíos.
+3. Confirmar precios de las ofertas (`frontend/lib/ofertas.ts`).
+4. Antes de cada tanda, pasar 3 o 4 webs del sector y revisar a mano que los hallazgos son ciertos.
+5. Instalar Umami en el mismo servidor (opcional).
+6. Primera tanda de envíos.
 
 Ideas aparcadas, no empezar sin consultarlo:
 
@@ -204,7 +209,7 @@ El repositorio está clonado en `/home/ubuntu/proyectos/auditoria-web` y **se si
 - **Copia diaria** de SQLite: `deploy/copia.sh` desde el cron del usuario `ubuntu` a las 03:15, en
   `~/backups/auditoria-web/`, 30 días. Está en el mismo disco: no protege de perder el servidor.
 - **`backend/.env`** (no está en git): `ADMIN_TOKEN` aleatorio ya puesto, `TRUST_PROXY=true`, `PUBLIC_BASE_URL`
-  con el dominio público. Falta `PAGESPEED_API_KEY`.
+  con el dominio público y `PAGESPEED_API_KEY`.
 - **Entorno de Python:** el servidor no tiene `python3-venv` y el índice de apt está desfasado. El `.venv` se creó
   con `python3 -m venv --without-pip .venv` y `get-pip.py`. No hace falta repetirlo salvo que se borre.
 

@@ -77,6 +77,9 @@ que solo vive en memoria:
 **Tus visitas no cuentan** en el navegador desde el que hayas entrado en `/admin`, o en cualquiera
 donde abras una página con `?notrack=1` (se deshace con `?notrack=0`).
 
+Además, Cloudflare Web Analytics cuenta visitas y páginas vistas (sin cookies; el fragmento está en
+`frontend/app/layout.tsx` y solo se carga en producción). Ahí sí cuentan tus visitas.
+
 Umami es opcional: rellena las dos variables `NEXT_PUBLIC_UMAMI_*` del frontend y recibirá los mismos eventos.
 
 ## Generar informes para enviar

@@ -10,15 +10,16 @@ export default function Privacidad() {
       <p>
         <strong>Responsable:</strong> [NOMBRE Y APELLIDOS O RAZÓN SOCIAL], NIF [NIF], [DOMICILIO]. Contacto: [EMAIL].
       </p>
-      <h2>Qué datos tratamos</h2>
+      <h2>Qué datos trato</h2>
       <p>
-        <strong>Tu email</strong>, solo si lo escribes para que te avisemos de un servicio o te enviemos un
-        presupuesto. Lo usamos únicamente para eso, con tu consentimiento, y puedes pedir que lo borremos escribiendo
+        <strong>Tu email</strong>, solo si lo escribes para que te avise de un servicio o te envíe un
+        presupuesto. Lo uso únicamente para eso, con tu consentimiento, y puedes pedir que lo borre escribiendo
         a [EMAIL].
       </p>
       <p>
-        <strong>Uso de la página</strong>: registramos de forma anónima qué secciones se ven y qué botones se pulsan,
-        para saber si la herramienta resulta útil. No usamos cookies ni guardamos tu dirección IP.
+        <strong>Uso de la página</strong>: registro de forma anónima qué secciones se ven y qué botones se pulsan,
+        para saber si la herramienta resulta útil. No uso cookies ni guardo tu dirección IP. Las visitas se cuentan además con Cloudflare Web
+        Analytics, que tampoco usa cookies ni identifica a quien visita la página.
       </p>
       <p>
         <strong>La dirección web que analizas</strong> y el resultado del análisis, que se hace sobre información

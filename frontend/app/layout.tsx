@@ -26,6 +26,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <span>Comprobación automática y orientativa. No sustituye a un asesoramiento técnico o legal.</span>
           <Link href="/privacidad">Privacidad</Link>
         </footer>
+        {process.env.NODE_ENV === "production" ? (
+          <Script
+            type="module"
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon='{"token": "a44ce64460a84a7b84e841641b875e54"}'
+            strategy="afterInteractive"
+          />
+        ) : null}
         {umamiSrc && umamiId ? (
           <Script src={umamiSrc} data-website-id={umamiId} strategy="afterInteractive" />
         ) : null}
