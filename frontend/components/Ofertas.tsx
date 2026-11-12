@@ -55,8 +55,8 @@ export default function Ofertas({ auditId, dominio }: { auditId: string; dominio
 
   return (
     <section className="ofertas">
-      <h2>¿Quieres ir más allá?</h2>
-      <p>Tres formas de sacarle partido al informe de {dominio}.</p>
+      <h2>¿Quieres que te ayude?</h2>
+      <p>Puedo corregir los fallos del informe de {dominio}.</p>
       <div className="rejilla">
         {OFERTAS.map((o) => (
           <div key={o.id} className="oferta">
@@ -94,7 +94,7 @@ export default function Ofertas({ auditId, dominio }: { auditId: string; dominio
                 <label className="casilla">
                   <input type="checkbox" checked={consiente} onChange={(e) => setConsiente(e.target.checked)} />
                   <span>
-                    Acepto que guardes mi email para este aviso. <Link href="/privacidad" target="_blank">Privacidad</Link>
+                    Acepto que guardes mi email para contactarme sobre esto. <Link href="/privacidad" target="_blank">Privacidad</Link>
                   </span>
                 </label>
                 {error ? (
@@ -103,7 +103,7 @@ export default function Ofertas({ auditId, dominio }: { auditId: string; dominio
                   </p>
                 ) : null}
                 <button type="submit" disabled={estado === "enviando"}>
-                  {estado === "enviando" ? "Enviando…" : "Avísame"}
+                  {estado === "enviando" ? "Enviando…" : "Enviar"}
                 </button>
               </form>
             )}

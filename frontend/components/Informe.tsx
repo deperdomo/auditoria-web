@@ -239,7 +239,11 @@ export default function Informe({ id }: { id: string }) {
         <section key={c.id} className="categoria">
           <h2>
             {c.nombre}
-            {c.puntuacion !== null ? <span className={`nota ${color(c.puntuacion)}`}>{c.puntuacion}/100</span> : null}
+            {c.puntuacion !== null ? (
+              <span className={`nota ${color(c.puntuacion)}`}>{c.puntuacion}/100</span>
+            ) : (
+              <span className="nota nota-pequena">No se ha podido comprobar</span>
+            )}
           </h2>
           <ul>
             {c.hallazgos.map((h) => (

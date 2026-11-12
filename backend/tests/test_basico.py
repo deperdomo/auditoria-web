@@ -104,19 +104,19 @@ def test_api_completa(monkeypatch):
     assert ev("report_view", envio).status_code == 204
     assert ev("scroll_depth", envio, pct=75).status_code == 204
     assert ev("door_view", envio).status_code == 204
-    assert ev("door_click", envio, door="pdf").status_code == 204
+    assert ev("door_click", envio, door="gratis").status_code == 204
     assert ev("Nombre Malo").status_code == 422
 
-    assert c.post("/api/leads", json={"email": "a@b.es", "door": "pdf", "consent": False}).status_code == 422
-    assert c.post("/api/leads", json={"email": "mal", "door": "pdf", "consent": True}).status_code == 422
-    assert c.post("/api/leads", json={"email": "A@b.es", "door": "pdf", "consent": True, "audit_id": envio}).status_code == 201
+    assert c.post("/api/leads", json={"email": "a@b.es", "door": "gratis", "consent": False}).status_code == 422
+    assert c.post("/api/leads", json={"email": "mal", "door": "gratis", "consent": True}).status_code == 422
+    assert c.post("/api/leads", json={"email": "A@b.es", "door": "gratis", "consent": True, "audit_id": envio}).status_code == 201
 
     assert c.get("/api/admin/stats").status_code == 403
     s = c.get("/api/admin/stats", headers=admin).json()
     grupo = next(g for g in s["embudo_por_grupo"] if g["grupo"] == "clinicas")
     assert grupo == {"grupo": "clinicas", "informes": 1, "abiertos": 1, "leyeron_mitad": 1,
                      "vieron_ofertas": 1, "clic_oferta": 1, "dejaron_email": 1}
-    assert s["ofertas"][0] == {"oferta": "pdf", "clics": 1, "emails": 1}
+    assert s["ofertas"][0] == {"oferta": "gratis", "clics": 1, "emails": 1}
     assert s["totales"]["emails"] == 1
 
 
@@ -140,3 +140,12 @@ def test_falsos_positivos_vistos_en_webs_reales():
     informe = construir_informe(hueca, None)
     ids = {h["id"] for c in informe["categorias"] for h in c["hallazgos"]}
     assert informe["contenido_dinamico"] and not ids & {"leg_aviso", "leg_privacidad", "con_contacto", "seo_h1"}
+
+
+def test_portada_hueca_sin_nota_en_legal_ni_confianza():
+    datos = analizar_html('<html><head><title>x</title><link rel="icon" href="/f.ico"></head><body><div id="app"></div></body></html>', "https://e.es/")
+    datos.update(sitemap=False, http_redirige=True)
+    assert datos["poco_contenido"]
+    notas = {c["id"]: c["puntuacion"] for c in construir_informe(datos, None)["categorias"]}
+    assert notas["legal"] is None and notas["confianza"] is None
+    assert notas["google"] is not None

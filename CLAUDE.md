@@ -113,7 +113,7 @@ Next.js 16 (App Router), React 19, TypeScript, CSS plano en `app/globals.css` (s
 |---|---|
 | `app/page.tsx` + `components/FormularioUrl.tsx` | Portada con la caja de URL |
 | `app/informe/[id]/page.tsx` + `components/Informe.tsx` | Informe compartible; lleva `noindex` |
-| `components/Ofertas.tsx` + `lib/ofertas.ts` | Las tres puertas falsas y la ventana del email |
+| `components/Ofertas.tsx` + `lib/ofertas.ts` | La oferta gratuita y la ventana del email |
 | `app/admin/page.tsx` + `components/Panel.tsx` | Panel de comportamiento |
 | `app/privacidad/page.tsx` | Texto de privacidad: nombre y email del titular, sin NIF ni domicilio |
 | `lib/track.ts` | Envío de eventos al backend y, si está configurado, a Umami |
@@ -130,11 +130,13 @@ Next.js 16 (App Router), React 19, TypeScript, CSS plano en `app/globals.css` (s
   menciona. No respeta `?notrack=1`: ahí las visitas de Deivi sí cuentan, y quien use bloqueador no aparece.
 - Umami es opcional y aún no está instalado. La fuente de verdad del comportamiento es la tabla `events`.
 
-### Las tres puertas falsas
+### La oferta
 
-`pdf` (19 €, pago único), `vigilancia` (9 €/mes) y `arreglo` (presupuesto). Los precios son **provisionales**,
-puestos sin consultar; Deivi tiene que confirmarlos. La ventana dice claramente que el servicio aún no está
-disponible y pide el email con casilla de consentimiento.
+Desde el 12-11-2026 hay **una sola oferta**, `gratis`: «Te arreglo los fallos gratis», limitada a 5 plazas al
+mes, a cambio de opinión, permiso para enseñar el antes y el después, y recomendaciones. Sustituye a las tres
+puertas falsas anteriores (`pdf` 19 €, `vigilancia` 9 €/mes, `arreglo`). Consecuencia asumida: **ya no se mide
+si alguien pagaría**; los umbrales de «clics en ofertas de pago» del plan de validación dejan de aplicarse y
+el dato a vigilar es cuántos trabajos gratis acaban en una recomendación (se lleva a mano, fuera de la web).
 
 ## Estado actual
 
@@ -142,7 +144,7 @@ Publicado en **https://auditoria.deiviperdomo.dev** desde el 11-11-2026 (ver «D
 
 Hecho y comprobado:
 
-- Los 5 tests del backend pasan (`cd backend && .venv/bin/python -m pytest`).
+- Los 6 tests del backend pasan (`cd backend && .venv/bin/python -m pytest`).
 - **Análisis contra webs reales.** Se pasaron unas 15 webs españolas (restaurantes, clínicas, despachos, tiendas)
   revisando el HTML de cada hallazgo dudoso. Falsos positivos encontrados y corregidos:
   - `alt=""` es la forma correcta de marcar una imagen decorativa; solo cuenta la imagen sin atributo `alt`.
@@ -150,7 +152,8 @@ Hecho y comprobado:
   - Más gestores de cookies reconocidos (módulo de Drupal, banner de Shopify, banners propios, Consent Mode).
   - **Portada hueca** (`poco_contenido`: sin enlaces, sin imágenes y casi sin texto): es una web que lo pinta todo
     con JavaScript. No se afirma que falten aviso legal, privacidad, contacto, titular ni aviso de cookies, y el
-    informe lo explica (`contenido_dinamico`).
+    informe lo explica (`contenido_dinamico`). Las categorías «Seguridad y textos legales» y «Contacto y confianza» salen
+    sin nota («No se ha podido comprobar»): antes daban un 100 engañoso solo por HTTPS o favicon.
   - Solo un enlace a «Contacto», sin teléfono ni email pulsables: «mejorable» (`con_contacto_enlace`), no «mal».
   - Sin etiqueta de icono se comprueba `/favicon.ico`, que es lo que hacen los navegadores.
   - Webs que bloquean bots (401/403/429) y portadas de más de 5 MB: mensaje de error claro en vez de un informe
@@ -175,10 +178,9 @@ En la base de datos de producción quedan cinco análisis de prueba del 11-11-20
 ## Pendiente, por orden
 
 1. Mirar el aspecto en el navegador (escritorio y móvil) y corregir lo que haga falta.
-2. Confirmar precios de las ofertas (`frontend/lib/ofertas.ts`).
-3. Antes de cada tanda, pasar 3 o 4 webs del sector y revisar a mano que los hallazgos son ciertos.
-4. Instalar Umami en el mismo servidor (opcional).
-5. Primera tanda de envíos.
+2. Antes de cada tanda, pasar 3 o 4 webs del sector y revisar a mano que los hallazgos son ciertos.
+3. Instalar Umami en el mismo servidor (opcional).
+4. Primera tanda de envíos.
 
 Ideas aparcadas, no empezar sin consultarlo:
 

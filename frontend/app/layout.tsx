@@ -23,7 +23,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </header>
         <main>{children}</main>
         <footer className="pie">
-          <span>Comprobación automática y orientativa. No sustituye a un asesoramiento técnico o legal.</span>
           <Link href="/privacidad">Privacidad</Link>
         </footer>
         {process.env.NODE_ENV === "production" ? (

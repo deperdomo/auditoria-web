@@ -118,11 +118,20 @@ def construir_informe(datos: dict[str, Any], psi: Optional[dict[str, Any]]) -> d
         pesos[categoria].append((estado, plantilla["peso"]))
         resumen[estado] += 1
 
+    # En una portada hueca no se evalúan aviso legal, privacidad ni contacto: una nota hecha solo con
+    # lo que queda (HTTPS, favicon) daría un 100 engañoso. Esas categorías salen sin nota.
+    sin_nota = set()
+    if datos.get("poco_contenido"):
+        sin_nota.add("legal")
+        if not any(h["id"].startswith("con_contacto") for h in por_categoria["confianza"]):
+            sin_nota.add("confianza")
+
     categorias = []
     for clave, nombre in CATEGORIAS.items():
         hallazgos = sorted(por_categoria[clave], key=lambda h: orden[h["estado"]])
         if hallazgos:
-            categorias.append({"id": clave, "nombre": nombre, "puntuacion": _nota(pesos[clave]), "hallazgos": hallazgos})
+            nota = None if clave in sin_nota else _nota(pesos[clave])
+            categorias.append({"id": clave, "nombre": nombre, "puntuacion": nota, "hallazgos": hallazgos})
 
     todos = [par for lista in pesos.values() for par in lista]
     return {

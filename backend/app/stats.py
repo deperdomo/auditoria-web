@@ -107,7 +107,7 @@ def calcular(audits: list[dict], events: list[dict], leads: list[dict]) -> dict[
         "embudo_web": [{"paso": p, "sesiones": len(sesiones_por_paso[p])} for p in PASOS_WEB],
         "embudo_por_grupo": [{"grupo": nombre, **valores} for nombre, valores in sorted(grupos.items())],
         "ofertas": [{"oferta": o, "clics": clics_oferta.get(o, 0), "emails": leads_por_oferta.get(o, 0)}
-                    for o in ("pdf", "vigilancia", "arreglo")],
+                    for o in ("gratis",)],
         "soluciones_mas_abiertas": [{"id": k, "veces": v} for k, v in soluciones.most_common(10)],
         "origenes": [{"origen": k, "visitas": v} for k, v in origenes.most_common(10)],
         "informes": filas[:300],

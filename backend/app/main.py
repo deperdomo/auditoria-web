@@ -21,7 +21,7 @@ limite_contactos = LimitePorIp(10, 3600)
 
 NOMBRE_EVENTO = re.compile(r"^[a-z0-9_]{1,40}$")
 EMAIL = re.compile(r"^[^@\s]{1,64}@[^@\s]{1,190}\.[a-zA-Z]{2,24}$")
-OFERTAS = {"pdf", "vigilancia", "arreglo"}
+OFERTAS = {"gratis"}
 
 
 def ip_de(request: Request) -> str:
