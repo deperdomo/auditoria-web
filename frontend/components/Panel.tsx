@@ -65,6 +65,13 @@ export default function Panel() {
     }
   }, []);
 
+  async function borrar(id: string, dominio: string) {
+    if (!window.confirm(`¿Eliminar el informe de ${dominio}? Se borran también sus visitas registradas y el enlace dejará de funcionar. No se puede deshacer.`)) return;
+    const r = await fetch(`/api/admin/audits/${id}`, { method: "DELETE", headers: { "X-Admin-Token": token } }).catch(() => null);
+    if (r?.ok) void cargar(token);
+    else window.alert("No se ha podido eliminar el informe.");
+  }
+
   useEffect(() => {
     try {
       const guardado = sessionStorage.getItem("aw_admin");
@@ -154,7 +161,7 @@ export default function Panel() {
 
       <h2>Informe a informe</h2>
       <div className="tabla"><table>
-        <thead><tr><th>Web</th><th>Sector</th><th>Nota</th><th>Visitas</th><th>Móvil</th><th>Bajó hasta</th><th>Tiempo</th><th>Soluciones</th><th>Ofertas pulsadas</th><th>Email</th></tr></thead>
+        <thead><tr><th>Web</th><th>Sector</th><th>Nota</th><th>Visitas</th><th>Móvil</th><th>Bajó hasta</th><th>Tiempo</th><th>Soluciones</th><th>Ofertas pulsadas</th><th>Email</th><th></th></tr></thead>
         <tbody>{datos.informes.map((i) => (
           <tr key={i.id}>
             <td><a href={`/informe/${i.id}`} target="_blank" rel="noreferrer">{i.dominio}</a></td>
@@ -165,6 +172,7 @@ export default function Panel() {
             <td>{i.soluciones_abiertas}</td>
             <td>{i.ofertas.join(", ") || (i.vio_ofertas ? "las vio" : "–")}</td>
             <td>{i.emails ? "sí" : "–"}</td>
+            <td><button type="button" className="boton-secundario" style={{ padding: "4px 10px", fontSize: "0.85rem" }} onClick={() => void borrar(i.id, i.dominio)}>Eliminar</button></td>
           </tr>
         ))}</tbody>
       </table></div>

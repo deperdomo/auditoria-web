@@ -100,6 +100,8 @@ Endpoints:
 - `POST /api/events` — registra una acción del visitante.
 - `POST /api/leads` `{email, door, consent, audit_id?}` — guarda un email; exige `consent: true`.
 - `GET /api/admin/stats` — datos del panel; exige `X-Admin-Token`.
+- `DELETE /api/admin/audits/{id}` — borra un informe y sus eventos (botón «Eliminar» del panel); exige
+  `X-Admin-Token`. Los emails de `leads` se conservan aunque se borre su informe.
 - `GET /api/health`.
 
 Para añadir una comprobación nueva: extraer el dato en `html_checks.py`, añadir la regla en `report.evaluar`,

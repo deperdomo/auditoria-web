@@ -144,3 +144,11 @@ def estadisticas(x_admin_token: Optional[str] = Header(default=None)) -> dict[st
     if not es_admin(x_admin_token):
         raise HTTPException(status_code=403, detail="Token incorrecto o sin configurar.")
     return stats.calcular(*db.todo_para_estadisticas())
+
+
+@app.delete("/api/admin/audits/{audit_id}", status_code=204)
+def borrar_analisis(audit_id: str, x_admin_token: Optional[str] = Header(default=None)) -> None:
+    if not es_admin(x_admin_token):
+        raise HTTPException(status_code=403, detail="Token incorrecto o sin configurar.")
+    if not db.borrar_audit(audit_id):
+        raise HTTPException(status_code=404, detail="Ese informe no existe.")

@@ -108,6 +108,14 @@ def leer_audit(audit_id: str) -> Optional[dict[str, Any]]:
     return dict(fila) if fila else None
 
 
+def borrar_audit(audit_id: str) -> bool:
+    """Borra un informe y sus eventos. Los emails se conservan: son contactos con consentimiento."""
+    with conexion() as con:
+        borrado = con.execute("DELETE FROM audits WHERE id=?", (audit_id,)).rowcount > 0
+        con.execute("DELETE FROM events WHERE audit_id=?", (audit_id,))
+    return borrado
+
+
 def buscar_reciente(url: str, horas: int) -> Optional[str]:
     """Devuelve el id de un informe reciente de la misma URL hecho por un visitante."""
     limite = (datetime.now(timezone.utc) - timedelta(hours=horas)).isoformat(timespec="seconds")

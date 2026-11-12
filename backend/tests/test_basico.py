@@ -119,6 +119,15 @@ def test_api_completa(monkeypatch):
     assert s["ofertas"][0] == {"oferta": "gratis", "clics": 1, "emails": 1}
     assert s["totales"]["emails"] == 1
 
+    # borrar un informe: solo el administrador; se van sus eventos y el email se conserva
+    assert c.delete(f"/api/admin/audits/{envio}").status_code == 403
+    assert c.delete(f"/api/admin/audits/{envio}", headers=admin).status_code == 204
+    assert c.delete(f"/api/admin/audits/{envio}", headers=admin).status_code == 404
+    assert c.get(f"/api/audits/{envio}").status_code == 404
+    s = c.get("/api/admin/stats", headers=admin).json()
+    assert all(i["id"] != envio for i in s["informes"]) and s["totales"]["emails"] == 1
+    assert not any(e["evento"] == "door_click" for e in s["recientes"])
+
 
 def test_falsos_positivos_vistos_en_webs_reales():
     """Casos sacados de portadas reales en las que el informe decía que faltaba algo que sí estaba."""
