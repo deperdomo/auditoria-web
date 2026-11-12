@@ -198,9 +198,15 @@ export default function Informe({ id }: { id: string }) {
           <p className="antetitulo">Informe de</p>
           <h1>{datos.domain}</h1>
           <p className="recuento">
-            <span className="punto mal" /> {r.resumen.mal} por arreglar
-            <span className="punto mejorable" /> {r.resumen.mejorable} mejorables
-            <span className="punto bien" /> {r.resumen.bien} bien
+            <span>
+              <span className="punto mal" /> {r.resumen.mal} por arreglar
+            </span>
+            <span>
+              <span className="punto mejorable" /> {r.resumen.mejorable} mejorables
+            </span>
+            <span>
+              <span className="punto bien" /> {r.resumen.bien} bien
+            </span>
           </p>
           <div className="acciones">
             <button type="button" className="boton-secundario" onClick={copiarEnlace}>

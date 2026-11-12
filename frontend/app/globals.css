@@ -87,7 +87,7 @@ input[type="text"], input[type="email"], input[type="password"] {
 .dial span { font-size: 2.6rem; font-weight: 800; line-height: 1; color: var(--c); }
 .dial small { font-size: 0.78rem; color: var(--tinta-suave); }
 .recuento { display: flex; gap: 6px 14px; flex-wrap: wrap; align-items: center; font-size: 0.95rem; color: var(--tinta-suave); }
-.punto { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: -8px; }
+.punto { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 2px; }
 .punto.mal { background: var(--mal); } .punto.mejorable { background: var(--mejorable); } .punto.bien { background: var(--bien); }
 .acciones { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
 .acciones .boton-secundario { padding: 8px 14px; font-size: 0.92rem; }
@@ -98,7 +98,7 @@ input[type="text"], input[type="email"], input[type="password"] {
 .urgentes li { margin: 4px 0; font-weight: 600; }
 
 .categoria { margin-top: 34px; }
-.categoria h2 { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; border-bottom: 2px solid var(--tinta); padding-bottom: 6px; }
+.categoria h2 { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; border-bottom: 2px solid var(--tinta); padding-bottom: 6px; }
 .nota { font-size: 0.95rem; font-weight: 700; }
 .nota.mal { color: var(--mal); } .nota.mejorable { color: var(--mejorable); } .nota.bien { color: var(--bien); }
 .categoria ul { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 12px; }

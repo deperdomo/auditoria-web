@@ -162,12 +162,14 @@ Hecho y comprobado:
   `http://` a `https://`.
 - **La llamada real a PageSpeed**, con la clave ya puesta: responde en unos 15 s y llegan todas las métricas
   que espera `pagespeed.interpretar`.
+- **Aspecto en el navegador** (12-11-2026, en local con Chrome sin interfaz, a 1280 px y simulando un móvil
+  de 390 px): portada, informe normal, informe de portada hueca y ventana del email. Sin desplazamiento
+  horizontal en móvil. Corregidos el recuento del resumen y la cabecera de categoría, que se partían mal en móvil.
 - El límite por IP a través de Cloudflare: seis peticiones con un `X-Forwarded-For` inventado y distinto cada vez
   acaban en 429.
 
 **Sin comprobar todavía:**
 
-- El aspecto en un navegador. Solo se ha comprobado que todas las clases usadas tienen regla en `globals.css`.
 - El aviso de cookies cuando el banner se carga desde Tag Manager (visto en una tienda grande): sale como «no se ve
   aviso de cookies». El texto de «Qué hacer» ya avisa de esa posibilidad; la solución de verdad es la comprobación
   con Playwright, que sigue aparcada.
@@ -177,10 +179,9 @@ En la base de datos de producción quedan cinco análisis de prueba del 11-11-20
 
 ## Pendiente, por orden
 
-1. Mirar el aspecto en el navegador (escritorio y móvil) y corregir lo que haga falta.
-2. Antes de cada tanda, pasar 3 o 4 webs del sector y revisar a mano que los hallazgos son ciertos.
-3. Instalar Umami en el mismo servidor (opcional).
-4. Primera tanda de envíos.
+1. Antes de cada tanda, pasar 3 o 4 webs del sector y revisar a mano que los hallazgos son ciertos.
+2. Instalar Umami en el mismo servidor (opcional).
+3. Primera tanda de envíos.
 
 Ideas aparcadas, no empezar sin consultarlo:
 
