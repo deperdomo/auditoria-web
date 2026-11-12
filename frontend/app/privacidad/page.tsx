@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Privacidad" };
+export const metadata: Metadata = {
+  title: "Privacidad",
+  description: "Qué datos se recogen al usar la auditoría web, para qué se usan y cómo pedir que se borren.",
+  alternates: { canonical: "/privacidad" },
+};
 
 const EMAIL = "deiviperdomodev@gmail.com";
 const correo = <a href={`mailto:${EMAIL}`}>{EMAIL}</a>;

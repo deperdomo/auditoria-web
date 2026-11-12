@@ -5,6 +5,7 @@ import type { NextConfig } from "next";
 const backend = process.env.BACKEND_URL ?? "http://127.0.0.1:8000";
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   // Quien entra por http:// pasa a https://. Cloudflare avisa del esquema original en `cf-visitor`;
   // en local esa cabecera no existe y no se redirige nada.
   async redirects() {

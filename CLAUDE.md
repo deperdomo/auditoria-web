@@ -119,6 +119,7 @@ Next.js 16 (App Router), React 19, TypeScript, CSS plano en `app/globals.css` (s
 | `app/admin/page.tsx` + `components/Panel.tsx` | Panel de comportamiento |
 | `app/privacidad/page.tsx` | Texto de privacidad: nombre y email del titular, sin NIF ni domicilio |
 | `lib/track.ts` | Envío de eventos al backend y, si está configurado, a Umami |
+| `lib/sitio.ts`, `app/robots.ts`, `app/sitemap.ts`, `app/icon.svg`, `app/opengraph-image.tsx` | SEO: dirección pública, robots, sitemap, icono e imagen al compartir (se genera al compilar, sin dependencias) |
 
 ### Seguimiento
 
