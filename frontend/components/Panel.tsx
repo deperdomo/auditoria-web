@@ -172,7 +172,7 @@ export default function Panel() {
             <td>{i.soluciones_abiertas}</td>
             <td>{i.ofertas.join(", ") || (i.vio_ofertas ? "las vio" : "–")}</td>
             <td>{i.emails ? "sí" : "–"}</td>
-            <td><button type="button" className="boton-secundario" style={{ padding: "4px 10px", fontSize: "0.85rem" }} onClick={() => void borrar(i.id, i.dominio)}>Eliminar</button></td>
+            <td><button type="button" className="boton-secundario boton-fila" onClick={() => void borrar(i.id, i.dominio)}>Eliminar</button></td>
           </tr>
         ))}</tbody>
       </table></div>

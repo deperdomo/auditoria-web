@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Ofertas from "@/components/Ofertas";
+import Senal from "@/components/Senal";
 import { iniciarSeguimiento, track, trackUnaVez } from "@/lib/track";
 import type { Analisis, Estado, Hallazgo } from "@/lib/tipos";
 
@@ -25,7 +26,10 @@ function color(nota: number | null): Estado {
 function Tarjeta({ h, auditId }: { h: Hallazgo; auditId: string }) {
   return (
     <li className={`hallazgo ${h.estado}`}>
-      <span className="etiqueta">{ETIQUETA[h.estado]}</span>
+      <span className="etiqueta">
+        <Senal estado={h.estado} />
+        {ETIQUETA[h.estado]}
+      </span>
       <h3>{h.titulo}</h3>
       <p>{h.explicacion}</p>
       {h.estado !== "bien" ? (
@@ -190,22 +194,21 @@ export default function Informe({ id }: { id: string }) {
   return (
     <article className="informe">
       <header className="resumen">
-        <div className={`dial ${color(nota)}`} style={{ ["--pct" as string]: `${nota ?? 0}%` }}>
-          <span>{nota ?? "–"}</span>
-          <small>de 100</small>
+        <div className={`dial ${color(nota)}`} role="img" aria-label={nota === null ? "Sin nota" : `Nota: ${nota} de 100`}>
+          <span aria-hidden="true">{nota ?? "–"}</span>
+          <small aria-hidden="true">de 100</small>
         </div>
         <div>
-          <p className="antetitulo">Informe de</p>
           <h1>{datos.domain}</h1>
           <p className="recuento">
             <span>
-              <span className="punto mal" /> {r.resumen.mal} por arreglar
+              <Senal estado="mal" /> {r.resumen.mal} por arreglar
             </span>
             <span>
-              <span className="punto mejorable" /> {r.resumen.mejorable} mejorables
+              <Senal estado="mejorable" /> {r.resumen.mejorable} mejorables
             </span>
             <span>
-              <span className="punto bien" /> {r.resumen.bien} bien
+              <Senal estado="bien" /> {r.resumen.bien} bien
             </span>
           </p>
           <div className="acciones">

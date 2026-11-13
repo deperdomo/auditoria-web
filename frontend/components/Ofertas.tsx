@@ -54,7 +54,7 @@ export default function Ofertas({ auditId, dominio }: { auditId: string; dominio
   }
 
   return (
-    <section className="ofertas">
+    <section className="ofertas placa">
       <h2>¿Quieres que te ayude?</h2>
       <p>Puedo corregir los fallos del informe de {dominio}.</p>
       <div className="rejilla">
@@ -74,7 +74,9 @@ export default function Ofertas({ auditId, dominio }: { auditId: string; dominio
         <div className="velo" role="dialog" aria-modal="true" aria-labelledby="titulo-modal" onClick={cerrar}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <button type="button" className="cerrar" aria-label="Cerrar" onClick={cerrar}>
-              ×
+              <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                <path d="M5 5l10 10M15 5 5 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
             </button>
             <h3 id="titulo-modal">{abierta.titulo}</h3>
             {estado === "hecho" ? (

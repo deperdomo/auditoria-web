@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
+import { Overpass } from "next/font/google";
 import { NOMBRE_SITIO, URL_SITIO } from "@/lib/sitio";
 import "./globals.css";
 
@@ -17,16 +18,19 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
 };
 
+// Overpass desciende de la tipografía de las señales de carretera. next/font la sirve desde el propio sitio.
+const fuente = Overpass({ subsets: ["latin"], variable: "--fuente", display: "swap" });
+
 const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC;
 const umamiId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
+    <html lang="es" className={fuente.variable}>
       <body>
         <header className="cabecera">
           <Link href="/" className="marca">
-            Auditoría<span>Web</span>
+            Auditoría web
           </Link>
         </header>
         <main>{children}</main>
