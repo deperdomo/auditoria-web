@@ -1,5 +1,4 @@
-/* Mundo visual: señalización de carretera. Azul de cartel informativo, amarillo de obras para la acción
-   principal, y el estado de cada hallazgo con forma de señal además de color. */
+/* Diseño sobrio: un solo color de acción (azul), neutros fríos y los tres colores de estado. */
 :root {
   --tinta: oklch(0.23 0.035 258);
   --tinta-suave: oklch(0.46 0.03 258);
@@ -9,8 +8,6 @@
   --senal: oklch(0.45 0.15 258);
   --senal-oscura: oklch(0.38 0.14 258);
   --senal-texto: oklch(0.93 0.03 250);
-  --obras: oklch(0.86 0.16 90);
-  --obras-hover: oklch(0.82 0.17 85);
   --mal: oklch(0.52 0.19 30);
   --mal-fondo: oklch(0.96 0.025 30);
   --mal-borde: oklch(0.86 0.07 30);
@@ -37,7 +34,7 @@ body {
   caret-color: var(--senal);
   accent-color: var(--senal);
 }
-::selection { background: oklch(0.86 0.16 90 / 0.6); color: var(--tinta); }
+::selection { background: oklch(0.85 0.06 255); color: var(--tinta); }
 main { max-width: 880px; margin: 0 auto; padding: 32px 20px 80px; }
 h1, h2, h3 { line-height: 1.15; margin: 0 0 0.45em; letter-spacing: -0.02em; text-wrap: balance; font-weight: 800; }
 h1 { font-size: clamp(2rem, 6vw, 3.4rem); }
@@ -48,19 +45,10 @@ a { color: var(--senal); text-underline-offset: 0.18em; text-decoration-thicknes
 a:hover { text-decoration-thickness: 2px; }
 .oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
-/* Placa: el cartel azul con filete blanco interior */
-.placa {
-  background: var(--senal); color: #fff; border-radius: var(--radio);
-  box-shadow: inset 0 0 0 3px var(--senal), inset 0 0 0 5px #fff, var(--sombra);
-}
 
 .cabecera { max-width: 880px; margin: 0 auto; padding: 20px 20px 0; }
-.marca {
-  display: inline-block; padding: 7px 14px 6px; border-radius: 8px; font-weight: 800; font-size: 1rem;
-  letter-spacing: -0.01em; text-decoration: none; color: #fff; background: var(--senal);
-  box-shadow: inset 0 0 0 2px var(--senal), inset 0 0 0 3.5px #fff;
-}
-.marca:hover { background: var(--senal-oscura); box-shadow: inset 0 0 0 2px var(--senal-oscura), inset 0 0 0 3.5px #fff; }
+.marca { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.01em; text-decoration: none; color: var(--tinta); }
+.marca span { color: var(--senal); }
 .pie {
   max-width: 880px; margin: 0 auto; padding: 22px 20px 32px; border-top: 1px solid var(--linea);
   display: flex; gap: 16px; justify-content: space-between; flex-wrap: wrap;
@@ -80,8 +68,6 @@ button:disabled { opacity: 0.65; cursor: wait; }
 .boton-secundario { background: var(--papel); color: var(--tinta); border-color: var(--linea); }
 .boton-secundario:hover { background: var(--papel); border-color: oklch(0.75 0.03 255); }
 :focus-visible { outline: 3px solid var(--senal); outline-offset: 2px; }
-.placa :focus-visible { outline-color: var(--obras); }
-.placa .oferta :focus-visible, .placa .modal :focus-visible { outline-color: var(--senal); }
 input[type="text"], input[type="email"], input[type="password"] {
   font: inherit; padding: 14px 15px; border: 1px solid oklch(0.78 0.02 255); border-radius: 10px;
   background: #fff; color: var(--tinta); width: 100%;
@@ -91,17 +77,14 @@ input::placeholder { color: oklch(0.55 0.02 255); }
 .nota-pequena { font-size: 0.88rem; color: var(--tinta-suave); }
 
 /* Portada */
-.portada .placa { padding: clamp(28px, 6vw, 56px); margin-top: 3vh; }
+.portada { padding-top: 6vh; }
 .portada h1 { max-width: 13em; }
-.entradilla { font-size: 1.15rem; color: var(--senal-texto); max-width: 34em; }
+.entradilla { font-size: 1.15rem; color: var(--tinta-suave); max-width: 34em; }
 .formulario { display: flex; gap: 10px; flex-wrap: wrap; margin: 28px 0 14px; max-width: 640px; }
 .formulario input { flex: 1 1 260px; }
 @media (max-width: 560px) { .formulario button { width: 100%; } }
-.placa .formulario input { border-color: #fff; font-size: 1.05rem; }
-.placa .formulario button { background: var(--obras); color: var(--tinta); }
-.placa .formulario button:hover { background: var(--obras-hover); }
-.placa .error { color: var(--mal); background: var(--mal-fondo); border-radius: 8px; padding: 8px 12px; }
-.placa-nota { margin: 0; font-size: 0.92rem; color: var(--senal-texto); }
+.formulario input { font-size: 1.05rem; }
+.portada-nota { margin: 0; font-size: 0.92rem; color: var(--tinta-suave); }
 .ventajas { list-style: none; padding: 0; margin: 48px 0 0; display: grid; gap: 28px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 .ventajas li { border-top: 3px solid var(--tinta); padding-top: 14px; color: var(--tinta-suave); font-size: 0.97rem; }
 .ventajas strong { display: block; color: var(--tinta); font-size: 1.05rem; margin-bottom: 4px; }
@@ -120,24 +103,21 @@ input::placeholder { color: oklch(0.55 0.02 255); }
 }
 .resumen > div:last-child { flex: 1 1 260px; min-width: 0; }
 .resumen h1 { font-size: clamp(1.5rem, 4.5vw, 2.2rem); overflow-wrap: anywhere; }
-/* La nota, como una señal de velocidad: aro de color y número grande */
 .dial {
   --c: var(--mejorable-dibujo);
-  width: 128px; height: 128px; border-radius: 50%; flex: none; background: #fff;
-  border: 13px solid var(--c); box-shadow: 0 0 0 1px var(--linea), var(--sombra);
+  width: 124px; height: 124px; border-radius: 50%; flex: none;
+  background: radial-gradient(closest-side, var(--papel) 82%, transparent 83%), conic-gradient(var(--c) var(--pct), var(--linea) 0);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  animation: aparecer 0.7s var(--salida) both;
+  animation: aparecer 0.6s var(--salida) both;
 }
 .dial.mal { --c: var(--mal); } .dial.bien { --c: var(--bien); }
 .dial span { font-size: 2.5rem; font-weight: 800; line-height: 1; letter-spacing: -0.03em; color: var(--tinta); font-variant-numeric: tabular-nums; }
 .dial small { font-size: 0.75rem; color: var(--tinta-suave); margin-top: 2px; }
-@keyframes aparecer { from { transform: scale(0.88); } }
+@keyframes aparecer { from { opacity: 0; } }
 .recuento { display: flex; gap: 6px 16px; flex-wrap: wrap; align-items: center; font-size: 0.95rem; color: var(--tinta-suave); font-variant-numeric: tabular-nums; }
 .recuento > span { display: inline-flex; align-items: center; gap: 6px; }
-.senal { width: 14px; height: 14px; flex: none; }
-.senal.mal { fill: var(--mal); }
-.senal.mejorable { fill: var(--mejorable-dibujo); stroke: var(--mejorable); stroke-width: 1; }
-.senal.bien { fill: var(--bien); }
+.punto { display: inline-block; width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.punto.mal { background: var(--mal); } .punto.mejorable { background: var(--mejorable-dibujo); } .punto.bien { background: var(--bien); }
 .acciones { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-top: 6px; }
 .acciones .boton-secundario { padding: 9px 15px; font-size: 0.92rem; }
 .enlace { font-size: 0.92rem; font-weight: 600; }
@@ -166,14 +146,13 @@ details[open] summary { margin-bottom: 4px; }
 details p { margin-top: 6px; color: var(--tinta); padding-left: 14px; border-left: 1px solid var(--linea); }
 
 /* Oferta */
-.ofertas { margin-top: 56px; padding: clamp(24px, 5vw, 40px); }
+.ofertas { background: var(--senal); color: #fff; border-radius: var(--radio); margin-top: 56px; padding: clamp(24px, 5vw, 40px); }
 .ofertas > p { color: var(--senal-texto); }
 .rejilla { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-top: 20px; }
 .oferta { background: #fff; color: var(--tinta); border-radius: 10px; padding: 22px; display: flex; flex-direction: column; }
 .oferta p { font-size: 0.97rem; color: var(--tinta-suave); max-width: 60ch; }
 .oferta .precio { font-weight: 800; color: var(--tinta); margin-top: auto; }
-.oferta button { width: 100%; background: var(--obras); color: var(--tinta); }
-.oferta button:hover { background: var(--obras-hover); }
+.oferta button { width: 100%; }
 @media (min-width: 640px) { .oferta button { width: auto; align-self: flex-start; } }
 .velo { position: fixed; inset: 0; background: oklch(0.2 0.04 258 / 0.6); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 10; animation: fundir 0.2s ease-out; }
 .modal { background: #fff; color: var(--tinta); border-radius: var(--radio); padding: 28px; width: 100%; max-width: 450px; position: relative; box-shadow: 0 24px 60px -12px oklch(0.2 0.04 258 / 0.45); animation: subir 0.35s var(--salida); }

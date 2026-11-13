@@ -27,15 +27,13 @@ export default function Inicio() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados) }}
       />
-      <div className="placa">
-        <h1>¿Qué está frenando a tu web?</h1>
-        <p className="entradilla">
-          Escribe la dirección y verás, sin tecnicismos, qué le impide traerte más clientes: velocidad, móvil,
-          Google, textos legales y contacto.
-        </p>
-        <FormularioUrl />
-        <p className="placa-nota">Gratis, sin registro y en un minuto.</p>
-      </div>
+      <h1>¿Qué está frenando a tu web?</h1>
+      <p className="entradilla">
+        Escribe la dirección y verás, sin tecnicismos, qué le impide traerte más clientes: velocidad, móvil,
+        Google, textos legales y contacto.
+      </p>
+      <FormularioUrl />
+      <p className="portada-nota">Gratis, sin registro y en un minuto.</p>
       <ul className="ventajas">
         <li>
           <strong>Explicado para dueños de negocio</strong>

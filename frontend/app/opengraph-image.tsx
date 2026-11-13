@@ -16,20 +16,17 @@ export default function Imagen() {
           flexDirection: "column",
           justifyContent: "center",
           padding: 90,
-          background: "#1550a8",
-          color: "#ffffff",
-          border: "14px solid #1550a8",
-          outline: "6px solid #ffffff",
-          outlineOffset: -26,
+          background: "#f3f6fa",
+          color: "#18213a",
         }}
       >
         <div style={{ display: "flex", fontSize: 38, fontWeight: 700 }}>
-          Auditoría web
+          Auditoría<span style={{ color: "#1550a8" }}>Web</span>
         </div>
         <div style={{ fontSize: 84, fontWeight: 700, lineHeight: 1.1, marginTop: 28 }}>
           ¿Qué está frenando a tu web?
         </div>
-        <div style={{ fontSize: 36, color: "#dbe6f7", marginTop: 28 }}>
+        <div style={{ fontSize: 36, color: "#56607a", marginTop: 28 }}>
           Gratis · sin registro · un minuto · sin tecnicismos
         </div>
       </div>

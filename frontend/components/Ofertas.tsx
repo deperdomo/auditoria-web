@@ -54,7 +54,7 @@ export default function Ofertas({ auditId, dominio }: { auditId: string; dominio
   }
 
   return (
-    <section className="ofertas placa">
+    <section className="ofertas">
       <h2>¿Quieres que te ayude?</h2>
       <p>Puedo corregir los fallos del informe de {dominio}.</p>
       <div className="rejilla">
