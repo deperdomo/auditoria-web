@@ -14,7 +14,7 @@ export const OFERTAS: Oferta[] = [
   {
     id: "gratis",
     titulo: "Te arreglo los fallos gratis",
-    descripcion: "Estoy ayudando gratis a unos pocos negocios de Madrid a cambio de su opinión. Déjame tu email y te digo qué arreglaría primero.",
+    descripcion: "Te ayudo a arreglar lo que frena tu web, sin coste. Déjame tu email y te digo por dónde empezaría.",
     precio: "Gratis. Solo 5 plazas este mes.",
     boton: "Quiero una plaza",
     aviso: "A cambio te pediré tu opinión sincera, permiso para enseñar el antes y el después, y que me recomiendes si quedas contento. Déjame tu email y te escribo.",

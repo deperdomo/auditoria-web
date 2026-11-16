@@ -37,6 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Visita />
         <main>{children}</main>
         <footer className="pie">
+          <span>Hecho por Deivi Perdomo</span>
           <Link href="/privacidad">Privacidad</Link>
         </footer>
         {process.env.NODE_ENV === "production" ? (
