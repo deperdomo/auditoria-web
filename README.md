@@ -65,6 +65,7 @@ que solo vive en memoria:
 
 | Evento | Cuándo |
 |---|---|
+| `page_view` | Carga cualquier página (menos `/admin`); lleva el canal `?sc=` de la entrada |
 | `home_view`, `url_focus`, `url_submit`, `url_error` | Portada: entra, pincha en la caja, envía, falla |
 | `report_view`, `report_ready`, `report_error` | Abre un informe; termina de cargarse (con segundos de espera y nota) |
 | `scroll_depth` | Baja al 25, 50, 75 y 100 % del informe |

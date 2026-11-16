@@ -10,6 +10,7 @@ declare global {
 
 const CLAVE_NO_SEGUIR = "aw_notrack";
 let sesion: string | null = null;
+let canal: string | null | undefined; // ?sc= (o utm_source) de la página de entrada; se conserva al navegar
 const enviados = new Set<string>();
 
 export function idSesion(): string {
@@ -49,6 +50,15 @@ function sinSeguimiento(): boolean {
   }
 }
 
+/** ?sc= identifica el canal (enlaces del panel); va en la misma columna que utm_source. */
+function canalDeEntrada(): string | null {
+  if (canal === undefined) {
+    const q = new URLSearchParams(window.location.search);
+    canal = q.get("sc") ?? q.get("utm_source");
+  }
+  return canal;
+}
+
 export function track(nombre: string, props: Props = {}, auditId?: string): void {
   if (typeof window === "undefined" || sinSeguimiento()) return;
   const cuerpo = JSON.stringify({
@@ -58,7 +68,7 @@ export function track(nombre: string, props: Props = {}, auditId?: string): void
     props,
     path: window.location.pathname,
     referrer: document.referrer || null,
-    utm_source: new URLSearchParams(window.location.search).get("utm_source"),
+    utm_source: canalDeEntrada(),
   });
   try {
     const enviado =

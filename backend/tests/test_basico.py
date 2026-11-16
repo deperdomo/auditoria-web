@@ -101,6 +101,9 @@ def test_api_completa(monkeypatch):
 
     def ev(nombre, audit_id=None, **props):
         return c.post("/api/events", json={"session_id": "s1", "name": nombre, "audit_id": audit_id, "props": props})
+    assert c.post("/api/events", json={"session_id": "s2", "name": "page_view", "utm_source": "dc_midudev"}).status_code == 204
+    assert ev("page_view").status_code == 204
+    assert ev("page_view").status_code == 204
     assert ev("report_view", envio).status_code == 204
     assert ev("scroll_depth", envio, pct=75).status_code == 204
     assert ev("door_view", envio).status_code == 204
@@ -118,6 +121,7 @@ def test_api_completa(monkeypatch):
                      "vieron_ofertas": 1, "clic_oferta": 1, "dejaron_email": 1}
     assert s["ofertas"][0] == {"oferta": "gratis", "clics": 1, "emails": 1}
     assert s["totales"]["emails"] == 1
+    assert sorted((o["origen"], o["visitantes"]) for o in s["origenes"]) == [("dc_midudev", 1), ("directo", 1)]
 
     # borrar un informe: solo el administrador; se van sus eventos y el email se conserva
     assert c.delete(f"/api/admin/audits/{envio}").status_code == 403

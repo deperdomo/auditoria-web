@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
 import { Overpass } from "next/font/google";
+import Visita from "@/components/Visita";
 import { NOMBRE_SITIO, URL_SITIO } from "@/lib/sitio";
 import "./globals.css";
 
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             Auditoría<span>Web</span>
           </Link>
         </header>
+        <Visita />
         <main>{children}</main>
         <footer className="pie">
           <Link href="/privacidad">Privacidad</Link>

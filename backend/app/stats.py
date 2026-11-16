@@ -31,14 +31,14 @@ def calcular(audits: list[dict], events: list[dict], leads: list[dict]) -> dict[
     sesiones_por_paso: dict[str, set[str]] = {p: set() for p in PASOS_WEB}
     clics_oferta: Counter[str] = Counter()
     soluciones: Counter[str] = Counter()
-    origenes: Counter[str] = Counter()
+    origen_de_sesion: dict[str, str] = {}
 
     for e in events:
         nombre, sesion, props = e["name"], e["session_id"], _props(e)
         if nombre in sesiones_por_paso:
             sesiones_por_paso[nombre].add(sesion)
-        if nombre == "home_view":
-            origenes[e.get("utm_source") or e.get("referrer") or "directo"] += 1
+        if nombre == "page_view":
+            origen_de_sesion.setdefault(sesion, e.get("utm_source") or e.get("referrer") or "directo")
         if nombre == "door_click":
             clics_oferta[str(props.get("door"))] += 1
         if nombre == "finding_open":
@@ -109,7 +109,7 @@ def calcular(audits: list[dict], events: list[dict], leads: list[dict]) -> dict[
         "ofertas": [{"oferta": o, "clics": clics_oferta.get(o, 0), "emails": leads_por_oferta.get(o, 0)}
                     for o in ("gratis",)],
         "soluciones_mas_abiertas": [{"id": k, "veces": v} for k, v in soluciones.most_common(10)],
-        "origenes": [{"origen": k, "visitas": v} for k, v in origenes.most_common(10)],
+        "origenes": [{"origen": k, "visitantes": v} for k, v in Counter(origen_de_sesion.values()).most_common(20)],
         "informes": filas[:300],
         "emails": [{"ts": l["ts"], "oferta": l["door"], "email": l["email"],
                     "dominio": dominio_de.get(l.get("audit_id") or "")} for l in leads[:200]],

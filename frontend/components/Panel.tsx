@@ -2,6 +2,13 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { marcarComoPropio } from "@/lib/track";
+import { URL_SITIO } from "@/lib/sitio";
+
+// Enlaces para compartir en cada canal: las visitas que entran por ellos salen con su código en «De dónde llegan».
+const CANALES = [
+  { nombre: "Discord · Emprendosfera", codigo: "dc_empdfra" },
+  { nombre: "Discord · midudev", codigo: "dc_midudev" },
+];
 
 interface Estadisticas {
   totales: { informes: number; errores: number; eventos: number; emails: number };
@@ -12,7 +19,7 @@ interface Estadisticas {
   }[];
   ofertas: { oferta: string; clics: number; emails: number }[];
   soluciones_mas_abiertas: { id: string; veces: number }[];
-  origenes: { origen: string; visitas: number }[];
+  origenes: { origen: string; visitantes: number }[];
   informes: {
     id: string; dominio: string; origen: string; sector: string | null; lote: string | null; nota: number | null;
     creado: string; vistas: number; visitantes: number; desde_movil: number; scroll: number; segundos: number;
@@ -158,6 +165,28 @@ export default function Panel() {
           </table></div>
         </div>
       </div>
+
+      <h2>De dónde llegan</h2>
+      <p className="nota-pequena">Enlaces para compartir por canal. Cada visitante cuenta una vez, aunque no haga nada más.</p>
+      <div className="tabla"><table>
+        <thead><tr><th>Canal</th><th>Enlace</th><th></th></tr></thead>
+        <tbody>{CANALES.map((c) => {
+          const enlace = `${URL_SITIO}/?sc=${c.codigo}`;
+          return (
+            <tr key={c.codigo}>
+              <td>{c.nombre}</td><td><code>{enlace}</code></td>
+              <td><button type="button" className="boton-secundario" onClick={() => void navigator.clipboard?.writeText(enlace)}>Copiar</button></td>
+            </tr>
+          );
+        })}</tbody>
+      </table></div>
+      <div className="tabla"><table>
+        <thead><tr><th>Origen</th><th>Visitantes</th></tr></thead>
+        <tbody>
+          {datos.origenes.map((o) => (<tr key={o.origen}><td>{o.origen}</td><td>{o.visitantes}</td></tr>))}
+          {datos.origenes.length === 0 ? <tr><td colSpan={2}>Aún no hay visitas.</td></tr> : null}
+        </tbody>
+      </table></div>
 
       <h2>Informe a informe</h2>
       <div className="tabla"><table>
