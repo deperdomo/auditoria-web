@@ -13,9 +13,9 @@ export interface Oferta {
 export const OFERTAS: Oferta[] = [
   {
     id: "gratis",
-    titulo: "Te arreglo los fallos gratis",
+    titulo: "Solo 3 plazas este mes",
     descripcion: "Te ayudo a arreglar lo que frena tu web, sin coste. Déjame tu email y te digo por dónde empezaría.",
-    precio: "Gratis. Solo 5 plazas este mes.",
+    precio: "",
     boton: "Quiero una plaza",
     aviso: "A cambio te pediré tu opinión sincera, permiso para enseñar el antes y el después, y que me recomiendes si quedas contento. Déjame tu email y te escribo.",
   },

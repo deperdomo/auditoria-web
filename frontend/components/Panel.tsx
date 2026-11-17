@@ -8,6 +8,7 @@ import { URL_SITIO } from "@/lib/sitio";
 const CANALES = [
   { nombre: "Discord · Emprendosfera", codigo: "dc_empdfra" },
   { nombre: "Discord · midudev", codigo: "dc_midudev" },
+  { nombre: "Mi portfolio", codigo: "portfolio" },
 ];
 
 interface Estadisticas {

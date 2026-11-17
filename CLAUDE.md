@@ -135,7 +135,7 @@ Next.js 16 (App Router), React 19, TypeScript, CSS plano en `app/globals.css` (s
 
 ### La oferta
 
-Desde el 12-11-2026 hay **una sola oferta**, `gratis`: «Te arreglo los fallos gratis», limitada a 5 plazas al
+Desde el 12-11-2026 hay **una sola oferta**, `gratis`: «Solo 3 plazas este mes» (antes «Te arreglo los fallos gratis», 5 plazas; cambiado el 17-11-2026), limitada a 3 plazas al
 mes, a cambio de opinión, permiso para enseñar el antes y el después, y recomendaciones. Sustituye a las tres
 puertas falsas anteriores (`pdf` 19 €, `vigilancia` 9 €/mes, `arreglo`). Consecuencia asumida: **ya no se mide
 si alguien pagaría**; los umbrales de «clics en ofertas de pago» del plan de validación dejan de aplicarse y

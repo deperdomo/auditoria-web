@@ -62,7 +62,7 @@ export default function Ofertas({ auditId, dominio }: { auditId: string; dominio
           <div key={o.id} className="oferta">
             <h3>{o.titulo}</h3>
             <p>{o.descripcion}</p>
-            <p className="precio">{o.precio}</p>
+            {o.precio ? <p className="precio">{o.precio}</p> : null}
             <button type="button" onClick={() => abrir(o)}>
               {o.boton}
             </button>
